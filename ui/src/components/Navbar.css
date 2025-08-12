@@ -1,0 +1,320 @@
+.navbar-container {
+  position: relative;
+  font-family: 'NordicPavilion', sans-serif;
+  z-index: 1000;
+}
+
+/* ---------- Logo ---------- */
+.logo-block {
+  position: relative;
+  top: 20px;
+  left: 100px;
+  z-index: 1000;
+}
+
+.logo {
+  font-size: 34px;
+  font-weight: bold;
+  font-family: 'NordicPavilion', sans-serif;
+}
+
+/* ---------- Top Horizontal Line ---------- */
+.top-line {
+  position: relative;
+  top: 20px;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background-color: black;
+  z-index: 999;
+}
+
+/* ---------- Vertical Lines ---------- */
+.right-line,
+.left-line {
+  position: fixed;
+  top: 0;
+  width: 2px;
+  height: 100vh;
+  background-color: black;
+  z-index: 999;
+}
+
+.right-line {
+  right: 70px;
+}
+
+.left-line {
+  left: 70px;
+}
+
+/* ---------- Nav Links ---------- */
+.nav-links {
+  position: fixed;
+  top: 50%;
+  right: -2%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  height: 500px;
+  z-index: 1000;
+  gap: 30px;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: #333;
+  font-weight: bold;
+  font-size: 16px;
+  transform: rotate(-270deg);
+  transform-origin: center center;
+  display: inline-block;
+  width: max-content;
+  transition: color 0.3s;
+}
+
+.nav-links a:hover:not(.not-hover-link) {
+  color: #FE936E;
+}
+
+/* ---------- Start Now Button ---------- */
+.start-now-btn {
+  background-color: #FF9A74;
+  padding: 15px 10px;
+  border-radius: 2px;
+  font-weight: bold;
+  color: black;
+  text-align: center;
+  transform: rotate(-270deg);
+  display: inline-block;
+  text-decoration: none;
+  font-size: 16px;
+  transition: all 0.3s ease;
+  margin-bottom: -40px;
+}
+
+.start-now-btn:hover {
+  background-color: #FE936E;
+  color: white;
+  transform: rotate(-270deg) scale(1.05);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.start-now-btn .arrow {
+  font-size: 18px;
+  margin-top: 4px;
+}
+
+/* ---------- Responsive Breakpoints ---------- */
+@media (max-width: 1200px) {
+  .logo {
+    font-size: 30px;
+  }
+
+  .nav-links a {
+    font-size: 15px;
+  }
+
+  .nav-links {
+    gap: 80px;
+  }
+}
+
+@media (max-width: 992px) {
+  .logo-block {
+    left: 40px;
+    top: 10px;
+  }
+
+  .logo {
+    font-size: 26px;
+    margin-left: 40px;
+  }
+
+  .nav-links {
+    right: 0;
+    gap: 60px;
+  }
+
+  .nav-links a {
+    font-size: 14px;
+    margin-right: -15px;
+  }
+
+.start-now-btn{
+  padding: 10px 8px;
+}
+
+  .top-line {
+    top: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .navbar-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 20px;
+    position: relative;
+  }
+   .top-line {
+    position: absolute;
+    top: 60px;
+    left: 0px;
+    right: 0px;
+    height: 1px;
+    width: auto;
+    background-color: black;
+    z-index: 999;
+  }
+
+  .logo-block {
+    position: static;
+    margin-right: 10px;
+  }
+
+  .logo {
+    font-size: 20px;
+    margin-left: 60px;
+  }
+
+  .nav-links {
+    position: static;
+    transform: none;
+    display: flex;
+    flex-direction: row;
+    gap: 14px;
+    height: auto;
+    align-items: center;
+    justify-content: flex-end;
+  }
+
+  .nav-links a
+  {
+    transform: none;
+    font-size: 13px;
+    writing-mode: horizontal-tb;
+  }
+.start-now-btn {
+  font-size: 8px;
+  padding: 6px 9px;
+  transform: none;
+  border-radius: 4px;
+  writing-mode: horizontal-tb;
+  white-space: nowrap;
+}
+
+ 
+}
+
+
+@media (max-width: 480px) {
+  .nav-links a {
+    font-size: 12px;
+  }
+
+  .nav-links {
+    gap: 12px;
+  }
+@media (max-width: 480px) {
+  .top-line {
+position: absolute;
+
+    top: 50px;
+    left: 20px;
+    right: 20px;
+    height: 1px;
+    width: auto; /* ✅ Fix */
+    background-color: black;
+    z-index: 1000;
+  }
+}
+
+  .logo {
+    font-size: 20px;
+    margin-left: 10px;
+  }
+
+  .right-line {
+  right: 20px;
+  width: 1px;
+}
+
+.left-line {
+  left: 20px;
+  width: 1px;
+}
+}
+/* Hamburger Icon */
+.hamburger-icon {
+  display: none;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 25px;
+  height: 18px;
+  cursor: pointer;
+  position: absolute;
+  top: 20px;
+  right: 30px;
+  z-index: 1100;
+}
+
+.hamburger-icon span {
+  display: block;
+  height: 3px;
+  background-color: #000;
+  border-radius: 2px;
+  transition: all 0.3s ease;
+}
+
+/* Cross Animation */
+.hamburger-icon.open span:nth-child(1) {
+  transform: rotate(45deg) translate(5px, 5px);
+}
+.hamburger-icon.open span:nth-child(2) {
+  opacity: 0;
+}
+.hamburger-icon.open span:nth-child(3) {
+  transform: rotate(-45deg) translate(5px, -5px);
+}
+
+/* Nav menu mobile style */
+@media (max-width: 768px) {
+  .hamburger-icon {
+    display: flex;
+  }
+
+  .nav-links {
+    position: absolute;
+    top: 60px;
+    right: 20px;
+    background: rgb(214, 213, 190);
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    display: none;
+  }
+
+  .nav-links.mobile-open {
+    display: flex;
+  }
+
+  .nav-links a
+   {
+    transform: none;
+    writing-mode: horizontal-tb;
+    font-size: 14px;
+  }
+
+  .start-now-btn {
+    padding: 10px 16px;
+    font-size: 14px;
+    margin-right: 110px;
+  }
+
+ 
+}

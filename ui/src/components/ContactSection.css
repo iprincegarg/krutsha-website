@@ -1,0 +1,358 @@
+  html, body {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    overflow-x: hidden;
+  }
+
+  /* Ensure section has no margin below */
+  .join-section {
+    font-family: 'NordicPavilion', sans-serif;
+    background-color: #fffdeb;
+    padding: 60px 20px 0 20px;
+    text-align: center;
+    margin-bottom: 0 !important;  
+  }
+
+  .join-section h1 {
+    font-size: 64px;
+    margin-bottom: 40px;
+    font-weight: 500;
+    letter-spacing: 2px;
+    word-spacing: 5px;
+  }
+
+  .join-image {
+    max-width: 300px;
+    margin: 0 auto 20px;
+    display: block;
+  }
+
+  /* Social Icons */
+  .social-icons {
+    margin: 30px 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 28px;
+  }
+
+  .social-icons img {
+    width: 60px;
+    height: 60px;
+    cursor: pointer;
+    margin-bottom: 20px;
+    transition: transform 0.2s ease;
+  }
+
+  .social-icons img:hover {
+    transform: scale(1.1);
+  }
+  .footer-wrapper {
+    background-color: #ffd262;
+    padding: 40px 0 0 0;
+    margin: 0 70px;
+  }
+
+  .footer {
+    display: flex;
+    justify-content: space-between;  /* Evenly distribute left and right */
+    align-items: flex-start;
+    flex-wrap: wrap;
+    padding: 50px 20px;
+    gap: 0;                /* 🔁 Remove overall flex gap */
+    column-gap: 20px;      /* 👈 Smaller horizontal gap */
+  }
+
+
+  /* 🔴 Brand/Left */
+  .footer-left {
+  text-align: left;       
+    display: flex;
+      flex: 0 0 25%; 
+    max-width: 240px;
+    flex-direction: column;
+    align-items: flex-start; /* 🔁 Ensure child elements align to start */
+  }
+
+  .footer-left h2 {
+    font-size: 50px;
+    margin-bottom: 10px;
+    margin-top: -40px;
+    margin-left: 20px;
+  }
+
+  .footer-left p {
+    margin-top: 50px;
+    font-size: 14px;
+    margin-left: 20px;
+  }
+.footer-column p {
+  color: #333;
+  transition: color 0.3s ease, transform 0.3s ease;
+  cursor: pointer;
+}
+
+.footer-column p:hover {
+  color: #FE936E; /* or any hover color */
+  transform: translateX(5px); /* subtle move right on hover */
+}
+
+  /* 🔵 Grouped Columns/Right */
+  .footer-right {
+    display: flex;
+      flex: 0 0 70%;    
+    justify-content: space-between;     /* aligns to right */
+    gap: 20px;                      /* space between columns */
+    flex-wrap: wrap;
+  }
+
+  /* Individual column inside right section */
+  .footer-column {
+    min-width: 150px;
+    text-align: left;
+  }
+
+  .footer-column h3 {
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+
+  .footer-column p {
+    margin: 5px 0;
+  }
+
+  .address-block {
+    margin-bottom: 28px; /* Only this adds space between address and contact */
+  }
+  /* ✅ FIXED: Add dot (.) to class selector */
+  .join-section {
+    position: relative;
+  }
+
+  /* Scroll-to-top button (inside section only) */
+  .scroll-to-top {
+    position: absolute;
+    bottom: 0px;
+    right: 110px;
+    background-color: black;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 16px;
+    cursor: pointer;
+    z-index: 10;
+    transition: background 0.3s ease;
+  }
+
+  .scroll-to-top:hover {
+    background-color: #FE936E;
+  }
+
+  .scroll-to-top .arrow-up {
+    font-size: 18px;
+    display: block;
+    transform: translateY(-2px);
+  }
+  @media (max-width: 1200px) {
+    .join-section h1 {
+      font-size: 48px;
+    }
+
+    .scroll-to-top {
+      right: 110px;
+    }
+    
+    .footer-left p {
+      margin-left: 20px;
+      margin-bottom: 20px;
+    }
+    .footer-left h2 {
+      font-size: 42px;
+    }
+
+    .footer-right {
+      gap: 30px;
+    }
+
+    .footer-wrapper {
+      margin: 0 70px;
+    }
+  }
+
+  @media (max-width: 992px) {
+    .join-section h1 {
+      font-size: 40px;
+      padding: 0 10px;
+    }
+
+    .join-image {
+      max-width: 220px;
+    }
+
+    .scroll-to-top {
+      right: 110px;
+      bottom: -20px;
+      padding: 8px 14px;
+    }
+
+    .footer {
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 40px 20px;
+    }
+
+    .footer-left, .footer-right {
+      flex: 0 0 100%;
+      max-width: 100%;
+    }
+
+    .footer-left h2 {
+      font-size: 36px;
+      margin-left: 0;
+    }
+
+    .footer-left p {
+      margin-left: 0;
+      margin-bottom: 20px;
+    }
+
+    .footer-wrapper {
+      margin: 0 70px;
+    }
+  }
+
+ @media (max-width: 768px) {
+  .footer-wrapper {
+    margin: 0 30px;
+  }
+
+  .scroll-to-top {
+    right: 90px;
+    bottom: -10px;
+    padding: 6px 10px;
+    font-size: 14px;
+  }
+ .footer-wrapper {
+    margin: 0 70px;
+  }
+  .footer {
+    flex-direction: column;
+    align-items: flex-start;
+    padding:40px 10px;
+  }
+
+  .footer-left,
+  .footer-right {
+    flex: 0 0 100%;
+    max-width: 100%;
+    margin: 0px 10px;
+    justify-content:space-between;
+       gap: 20px;
+
+    
+  } 
+  .footer-left h2 {
+    font-size: 28px;
+    margin-left: 0;
+  }
+
+  .footer-left p {
+    margin-left: 0;
+    margin-bottom: 20px;
+  }
+  
+  .social-icons {
+    gap: 12px;
+    margin: 20px 0;
+  }
+
+  .footer-column {
+    min-width: 120px;
+  }
+  .join-image {
+    max-width: 300px;
+    margin: 0 auto 16px;
+  }
+
+  .join-section img {
+    width: 100%; 
+    max-width: 350px; 
+    height: auto;
+  }
+    .join-section h1 {
+        font-size: 32px;
+        padding: 0 10px;
+    
+}
+ }
+  .social-icons img {
+    width: 36px;
+    height: 36px;
+    margin-bottom: 12px;
+  }
+@media (max-width: 480px) {
+  .join-section h1 {
+    font-size: 26px;
+  }
+
+  .join-image {
+    max-width: 180px;
+    margin: 0 auto 20px;
+  }
+
+  .join-image img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  .social-icons {
+    gap: 8px;
+  }
+
+  .social-icons img {
+    width: 36px;
+    height: 36px;
+  }
+
+  .scroll-to-top {
+    right: 50px;
+    bottom: -18px;
+    font-size: 12px;
+    padding: 5px 9px;
+  }
+
+  .footer-wrapper {
+    margin: 0 20px;
+  }
+
+  .footer {
+    padding: 30px 10px;
+  }
+
+  .footer-left h2 {
+    font-size: 26px;
+  }
+
+  .footer-column h3 {
+    font-size: 14px;
+  }
+
+  .footer-column p {
+    font-size: 13px;
+  }
+      .join-section h1 {
+        font-size: 35px;
+        padding: 0 10px;
+    
+}
+}
+.footer-link {
+  color: black;       /* ya jo tumhare design ka text color hai */
+  text-decoration: none;
+}
+
+.footer-link:hover {
+color: #FE936E;
+}
