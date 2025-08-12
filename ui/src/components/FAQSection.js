@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import './FAQSection.css';
 
+
 const faqs = [
   {
     question: "What is Krutsha?",
@@ -32,10 +33,10 @@ function FAQSection() {
     <section id ="faq" className="faq-section">
       <div className="faq-container">
         {/* Left Image */}
-        <div className="faq-image">
-          <img src="/assets/faq.png" alt="FAQ Visual" />
-        </div>
-
+         <div className="faq-image">
+  <img src={`${process.env.PUBLIC_URL}/assets/faq.png`} alt="FAQ Visual" />
+</div>
+ 
         {/* Right Text */}
         <div className="faq-content">
           <h2 className="faq-heading">FAQ</h2>
