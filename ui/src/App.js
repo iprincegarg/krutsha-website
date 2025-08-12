@@ -15,7 +15,7 @@ import PrivacyPolicy from './pages/PrivacyPolicy';
 
 function App() {
   return (
-   <Router>
+    <Router basename="/kru">
       <ScrollToTop />
       <Navbar />
 
