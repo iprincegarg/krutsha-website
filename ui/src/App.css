@@ -1,96 +1,105 @@
-/* index.css or App.css */
-* {
-  margin: 0px;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-html, body {
-  overflow-x: hidden;
-  width: 100%;
-    margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-body {
-  font-family: 'Roboto', sans-serif;
-   font-family: 'NordicPavilion', sans-serif;
-  background-color:#FCFBED;
-  color: #000;
-  line-height: 1.6;
-}
-
-/* === FLEXIBLE CONTAINERS === */
-.container {
-  width: 100%;
-  max-width: 1200px;
-  padding: 0 16px;
-  margin: 0 auto;
-}
-
-/* === IMAGES & BUTTONS === */
-img {
-  max-width: 100%;
-  height: auto;
-  
-}
-
-button {
-  font-size: 1rem;
-  cursor: pointer;
-}
-
-/* === RESPONSIVE TYPOGRAPHY === */
-h1 {
-  font-size: 2rem;
-}
-h2 {
-  font-size: 1.5rem;
-}
-p {
-  font-size: 1rem;
-}
-
-/* === MEDIA QUERIES === */
-
-/* Tablets */
-@media (max-width: 1024px) {
-  .hero {
-    flex-direction: column;
-    padding: 80px 40px;
+  /* index.css or App.css */
+  * {
+    margin: 0px;
+    padding: 0;
+    box-sizing: border-box;
   }
-  .hero-right {
-    padding-right: 0;
-    justify-content: center;
-  }
-  .hero-left {
-    padding-left: 0;
-    text-align: center;
-  }
-  .cta-button {
-    margin: 20px auto;
-  }
-}
 
-/* Mobile */
-@media (max-width: 768px) {
+  html, body {
+    overflow-x: hidden;
+    width: 100%;
+      margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  @font-face {
+    font-family: 'NordicPavilion';
+    src: url('https://adityasharma016.github.io/kru/fonts/NordicPavilion.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+  }
+
+
+
+  body {
+    font-family: 'Roboto', sans-serif;
+    font-family: 'NordicPavilion', sans-serif;
+    background-color:#FCFBED;
+    color: #000;
+    line-height: 1.6;
+  }
+
+  /* === FLEXIBLE CONTAINERS === */
+  .container {
+    width: 100%;
+    max-width: 1200px;
+    padding: 0 16px;
+    margin: 0 auto;
+  }
+
+  /* === IMAGES & BUTTONS === */
+  img {
+    max-width: 100%;
+    height: auto;
+    
+  }
+
+  button {
+    font-size: 1rem;
+    cursor: pointer;
+  }
+
+  /* === RESPONSIVE TYPOGRAPHY === */
   h1 {
-    font-size: 1.75rem;
+    font-size: 2rem;
   }
   h2 {
-    font-size: 1.25rem;
+    font-size: 1.5rem;
   }
   p {
-    font-size: 0.95rem;
+    font-size: 1rem;
   }
-  .grid-container {
-    grid-template-columns: 1fr !important;
-    grid-template-rows: auto;
-    gap: 20px;
-    height: auto;
+
+  /* === MEDIA QUERIES === */
+
+  /* Tablets */
+  @media (max-width: 1024px) {
+    .hero {
+      flex-direction: column;
+      padding: 80px 40px;
+    }
+    .hero-right {
+      padding-right: 0;
+      justify-content: center;
+    }
+    .hero-left {
+      padding-left: 0;
+      text-align: center;
+    }
+    .cta-button {
+      margin: 20px auto;
+    }
   }
-  .service-grid-section {
-    padding: 40px 20px;
+
+  /* Mobile */
+  @media (max-width: 768px) {
+    h1 {
+      font-size: 1.75rem;
+    }
+    h2 {
+      font-size: 1.25rem;
+    }
+    p {
+      font-size: 0.95rem;
+    }
+    .grid-container {
+      grid-template-columns: 1fr !important;
+      grid-template-rows: auto;
+      gap: 20px;
+      height: auto;
+    }
+    .service-grid-section {
+      padding: 40px 20px;
+    }
   }
-}

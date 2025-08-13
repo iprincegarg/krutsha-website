@@ -1,5 +1,6 @@
   .faq-section {
     padding: 60px 40px;
+    margin-top: 200px;
   }
 
   .faq-container {
@@ -136,10 +137,14 @@
     .faq-answer {
       font-size: 17px;
     }
-
+.faq-section {
+  
+    margin-top: 100px;
+  }
     .faq-image img {
       max-height: 500px;
     }
+    
   }
   @media (max-width: 1350px) and (min-width: 1024px) {
     .faq-container {
@@ -149,7 +154,10 @@
     .faq-section {
       padding: 50px 30px;
     }
-
+.faq-section {
+  
+    margin-top: 50px;
+  }
     .faq-heading {
       font-size: 42px;
     }

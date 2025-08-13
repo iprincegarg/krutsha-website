@@ -21,15 +21,16 @@ const ContactSection = () => {
     <>
       <section className="join-section">
         <h1>Want To Join Us?</h1>
-        <img src="/assets/union.png" alt="Join Us" className="contact-top-image" />
+       <img src={`${process.env.PUBLIC_URL}/assets/Union.png`} alt="Join Us" className="contact-top-image" />
+
 
         <div className="social-icons">
-          <img src="/assets/link.png" alt="LinkedIn" />
-          <img src="/assets/face.png" alt="Facebook" />
-          <img src="/assets/insta.png" alt="Instagram" />
-          <img src="/assets/youtube.png" alt="YouTube" />
-          <img src="/assets/twitter.png" alt="Tumblr" />
-          <img src="/assets/print.png" alt="Pinterest" />
+    <img src={`${process.env.PUBLIC_URL}/assets/link.png`} alt="LinkedIn" />
+  <img src={`${process.env.PUBLIC_URL}/assets/face.png`} alt="Facebook" />
+  <img src={`${process.env.PUBLIC_URL}/assets/insta.png`} alt="Instagram" />
+  <img src={`${process.env.PUBLIC_URL}/assets/youtube.png`} alt="YouTube" />
+  <img src={`${process.env.PUBLIC_URL}/assets/twitter.png`} alt="Tumblr" />
+  <img src={`${process.env.PUBLIC_URL}/assets/print.png`} alt="Pinterest" />
         </div>
 
         {/* Scroll to top button */}
@@ -40,16 +41,21 @@ const ContactSection = () => {
         )}
       </section>
 
-      <footer className="footer-wrapper">
-        <div className="footer">
-          <div className="footer-left">
-            <h2>Krutsha</h2>
-            <p>
-              Copyright © 2027 by<br />
-              Krutsha, Inc. All<br />
-              rights reserved.
-            </p>
-          </div>
+     <footer className="footer-wrapper">
+  <div className="footer">
+    <div className="footer-left">
+      {/* This will work in React AND after deploy on GitHub Pages */}
+      <img 
+        src={`${process.env.PUBLIC_URL}/assets/logo.png`} 
+        alt="Krutsha Logo" 
+        className="footer-logo" 
+      />
+      <p>
+        Copyright © 2027 by<br />
+        Krutsha, Inc. All<br />
+        rights reserved.
+      </p>
+    </div>
 
           <div className="footer-right">
             <div className="footer-column">

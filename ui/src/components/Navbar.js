@@ -39,7 +39,7 @@ function Navbar() {
       <div className={`nav-links ${isMobileMenuOpen ? 'mobile-open' : ''}`}>
         <a href="#hero" onClick={closeMenu}>Home</a>
         <a href="#about" onClick={closeMenu}>About</a>
-        <a href="#services" onClick={closeMenu}>Services</a>
+<a href="#services" onClick={closeMenu}>Services</a>  
         <a href="#faq" onClick={closeMenu}>Contact</a>
         <a href="#start" className="start-now-btn not-hover-link" onClick={closeMenu}>
           Start now <span className="arrow">↗</span>

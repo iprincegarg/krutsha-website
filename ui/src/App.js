@@ -26,8 +26,8 @@ function App() {
           element={
             <>
               <HeroSection />
-              <ServiceSection />
               <About />
+              <ServiceSection />
               <FAQSection />
               <ContactSection />
             </>

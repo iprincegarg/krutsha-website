@@ -23,9 +23,10 @@ function HeroSection() {
 </button>
 
       </div>
-      <div className="hero-right">
-      <img src="assets/Group 1.png" alt="Hero" />
-      </div>
+     <div className="hero-right">
+  <img src={`${process.env.PUBLIC_URL}/assets/Group 1.png`} alt="Hero" />
+</div>
+
     </section>
   );
 }

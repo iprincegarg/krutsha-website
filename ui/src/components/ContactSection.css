@@ -93,6 +93,7 @@
   cursor: pointer;
 }
 
+
 .footer-column p:hover {
   color: #FE936E; /* or any hover color */
   transform: translateX(5px); /* subtle move right on hover */
@@ -355,4 +356,37 @@
 
 .footer-link:hover {
 color: #FE936E;
+}
+/* Default desktop view */
+.footer-logo {
+  max-width: 150px;   /* limit on large screens */
+  width: 100%;        /* makes it shrink if needed */
+  height: auto;       /* keeps aspect ratio */
+  display: block;
+  margin-bottom: 10px;
+  margin-left: 20px;
+}
+
+/* Tablets (≤ 992px) */
+@media (max-width: 992px) {
+  .footer-logo {
+    max-width: 130px;
+    margin-bottom: 10px;
+  }
+}
+
+/* Small tablets / large mobiles (≤ 768px) */
+@media (max-width: 768px) {
+  .footer-logo {
+    max-width: 110px;
+    margin-bottom: 10px;
+  }
+}
+
+/* Mobiles (≤ 480px) */
+@media (max-width: 480px) {
+  .footer-logo {
+    max-width: 90px;
+    margin-bottom: 8px;
+  }
 }
