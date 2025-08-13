@@ -382,6 +382,10 @@ color: #FE936E;
     margin-bottom: 10px;
   }
 }
+.arrow-up {
+  font-size: 24px;
+  color: white;
+}
 
 /* Mobiles (≤ 480px) */
 @media (max-width: 480px) {

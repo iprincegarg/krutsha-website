@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import './ContactSection.css';
 import { Link } from 'react-router-dom';
+import { FaChevronUp } from "react-icons/fa";
 
 const ContactSection = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -33,12 +34,12 @@ const ContactSection = () => {
   <img src={`${process.env.PUBLIC_URL}/assets/print.png`} alt="Pinterest" />
         </div>
 
-        {/* Scroll to top button */}
-        {isVisible && (
-          <button className="scroll-to-top" onClick={scrollToTop}>
-            <span className="arrow-up">ᐱ</span>
-          </button>
-        )}
+{isVisible && (
+  <button className="scroll-to-top" onClick={scrollToTop}>
+    <FaChevronUp className="arrow-up" />
+  </button>
+)}
+
       </section>
 
      <footer className="footer-wrapper">
