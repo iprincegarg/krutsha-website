@@ -148,7 +148,7 @@
   }
   @media (max-width: 1350px) and (min-width: 1024px) {
     .faq-container {
-      gap: 10px; /* kam gap between image & text */
+      gap: 10px;
     }
 
     .faq-section {
@@ -310,12 +310,12 @@
         font-size: 14px;
       }
   .faq-image img {
-    width: 100%;              /* Make it full-width inside container */
-    max-width: 750px;         /* You can increase this if needed */
-    max-height: none;         /* Remove height limit */
-    height: auto;             /* Maintain aspect ratio */
+    width: 100%;             
+    max-width: 750px;         
+    max-height: none;         
+    height: auto;             
     display: block;
-    margin: 0 auto;           /* Center the image */
+    margin: 0 auto;           
   }
 
 

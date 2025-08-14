@@ -1,4 +1,4 @@
-// src/components/HeroSection.js
+
 import './HeroSection.css';
 
 function HeroSection() {

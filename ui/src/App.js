@@ -8,7 +8,7 @@ import ServiceSection from './components/ServiceSection';
 import About from './components/about';
 import FAQSection from './components/FAQSection';
 import ScrollToTop from './components/ScrollToTop'; 
-
+import Header from './components/header';
 import TermsOfService from './pages/TermsOfService';
 import RefundPolicy from './pages/RefundPolicy';
 import PrivacyPolicy from './pages/PrivacyPolicy';
@@ -17,6 +17,7 @@ function App() {
   return (
     <Router basename="/kru">
       <ScrollToTop />
+ 
       <Navbar />
 
       <Routes>
@@ -25,6 +26,7 @@ function App() {
           path="/"
           element={
             <>
+            <Header />
               <HeroSection />
               <About />
               <ServiceSection />

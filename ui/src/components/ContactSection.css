@@ -95,20 +95,20 @@
 
 
 .footer-column p:hover {
-  color: #FE936E; /* or any hover color */
-  transform: translateX(5px); /* subtle move right on hover */
+  color: #FE936E; 
+  transform: translateX(5px); 
 }
 
   /* 🔵 Grouped Columns/Right */
   .footer-right {
     display: flex;
       flex: 0 0 70%;    
-    justify-content: space-between;     /* aligns to right */
-    gap: 20px;                      /* space between columns */
+    justify-content: space-between;    
+    gap: 20px;                      
     flex-wrap: wrap;
   }
 
-  /* Individual column inside right section */
+  
   .footer-column {
     min-width: 150px;
     text-align: left;
@@ -124,14 +124,14 @@
   }
 
   .address-block {
-    margin-bottom: 28px; /* Only this adds space between address and contact */
+    margin-bottom: 28px; 
   }
-  /* ✅ FIXED: Add dot (.) to class selector */
+ 
   .join-section {
     position: relative;
   }
 
-  /* Scroll-to-top button (inside section only) */
+  
   .scroll-to-top {
     position: absolute;
     bottom: 0px;
@@ -350,18 +350,18 @@
 }
 }
 .footer-link {
-  color: black;       /* ya jo tumhare design ka text color hai */
+  color: black;       
   text-decoration: none;
 }
 
 .footer-link:hover {
 color: #FE936E;
 }
-/* Default desktop view */
+
 .footer-logo {
-  max-width: 150px;   /* limit on large screens */
-  width: 100%;        /* makes it shrink if needed */
-  height: auto;       /* keeps aspect ratio */
+  max-width: 150px;   
+  width: 100%;       
+  height: auto;       
   display: block;
   margin-bottom: 10px;
   margin-left: 20px;
@@ -375,7 +375,6 @@ color: #FE936E;
   }
 }
 
-/* Small tablets / large mobiles (≤ 768px) */
 @media (max-width: 768px) {
   .footer-logo {
     max-width: 110px;
@@ -387,7 +386,6 @@ color: #FE936E;
   color: white;
 }
 
-/* Mobiles (≤ 480px) */
 @media (max-width: 480px) {
   .footer-logo {
     max-width: 90px;

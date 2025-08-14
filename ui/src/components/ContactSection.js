@@ -45,7 +45,7 @@ const ContactSection = () => {
      <footer className="footer-wrapper">
   <div className="footer">
     <div className="footer-left">
-      {/* This will work in React AND after deploy on GitHub Pages */}
+    
       <img 
         src={`${process.env.PUBLIC_URL}/assets/logo.png`} 
         alt="Krutsha Logo" 

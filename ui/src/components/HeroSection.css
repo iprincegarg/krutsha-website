@@ -90,8 +90,6 @@
     display: block;
   }
 
-  /* ----------- Responsive Breakpoints ----------- */
-/* ---------- 1200px and below ---------- */
 @media (max-width: 1200px) {
   .hero-left h1 {
     font-size: 42px;
@@ -113,18 +111,17 @@
   }
 }
 
-/* ---------- 1024px and below ---------- */
 @media (max-width: 1024px) {
   .hero {
     flex-direction: row;
     align-items: flex-start;
-    gap: 10px; /* 🔥 Reduce gap even more */
-    padding: 60px 30px; /* Adjust overall padding */
+    gap: 10px; 
+    padding: 60px 30px; 
   }
 
   .hero-left {
     flex: 1;
-    padding-left: 10px; /* 🔥 Reduce left padding */
+    padding-left: 10px;
     text-align: left;
     margin-left: 40px;
     align-items: flex-start;
@@ -151,17 +148,16 @@
 
   .hero-right {
     flex: 1;
-    padding-right: 10px; /* 🔥 Less space on right */
+    padding-right: 10px; 
     justify-content: flex-end;
   }
 
   .hero-right img {
-    max-width: 70%; /* 🔥 Increase image size */
+    max-width: 70%; 
     height: auto;
     margin-right: 35px;
   }
 }
-/* ✅ For screen width between 1464px and 1200px */
 @media (max-width: 1464px) and (min-width: 1200px) {
   .about-text {
     font-size: 16px;
@@ -247,11 +243,11 @@
     .hero-left p {
       font-size: 16px;
       margin-top: 30px;
-      max-width: 80%;       /* ✅ Restrict width */
+      max-width: 80%;       
       padding: 0 10px;   
     }
   .hero-right img {
-    max-width: 60%;  /* 👈 Shrinks the image size */
+    max-width: 60%;  
     height: auto;
     display: block;
     margin-right: -10px;
