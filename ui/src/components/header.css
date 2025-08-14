@@ -4,7 +4,7 @@
   left: 0;
   width: 100%;
   height: 60px;
- background-color: #FCFBED;
+  background-color: #FCFBED;
   border-bottom: 1px solid black;
   z-index: 999;
   display: flex;
@@ -33,4 +33,61 @@
 
 .top-line nav a:hover {
   color: #007bff;
+}
+
+@media (max-width: 992px) {
+  .top-line {
+    padding: 0 40px;
+  }
+
+  .logo {
+    font-size: 26px;
+    margin-left: 50px;
+  }
+
+  .top-line nav {
+    gap: 15px;
+  }
+}
+
+@media (max-width: 768px) {
+  .top-line {
+    padding: 0 20px;
+  }
+
+  .logo {
+    font-size: 22px;
+    margin-left: 70px;
+  }
+
+  .top-line nav {
+    gap: 10px;
+  }
+
+  .top-line nav a {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .top-line {
+    flex-direction: column;
+    height: auto;
+    padding: 10px 15px;
+    align-items: flex-start;
+  }
+
+  .logo {
+    font-size: 20px;
+   margin-left: 20px;
+  }
+
+  .top-line nav {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .top-line nav a {
+    font-size: 13px;
+  }
 }

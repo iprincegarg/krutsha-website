@@ -20,7 +20,6 @@
   margin-bottom: 15px;
 }
 
-/* Tablet view */
 @media (max-width: 768px) {
   .page-container {
     padding: 15px;
@@ -36,7 +35,7 @@
   }
 }
 
-/* Mobile view */
+
 @media (max-width: 480px) {
   .page-container {
     padding: 10px;

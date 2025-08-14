@@ -1,4 +1,4 @@
-  /* index.css or App.css */
+
   * {
     margin: 0px;
     padding: 0;
@@ -30,7 +30,6 @@
     line-height: 1.6;
   }
 
-  /* === FLEXIBLE CONTAINERS === */
   .container {
     width: 100%;
     max-width: 1200px;
@@ -38,7 +37,6 @@
     margin: 0 auto;
   }
 
-  /* === IMAGES & BUTTONS === */
   img {
     max-width: 100%;
     height: auto;
@@ -50,7 +48,6 @@
     cursor: pointer;
   }
 
-  /* === RESPONSIVE TYPOGRAPHY === */
   h1 {
     font-size: 2rem;
   }
@@ -60,10 +57,6 @@
   p {
     font-size: 1rem;
   }
-
-  /* === MEDIA QUERIES === */
-
-  /* Tablets */
   @media (max-width: 1024px) {
     .hero {
       flex-direction: column;
@@ -82,7 +75,6 @@
     }
   }
 
-  /* Mobile */
   @media (max-width: 768px) {
     h1 {
       font-size: 1.75rem;

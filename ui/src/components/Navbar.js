@@ -1,4 +1,4 @@
-// src/components/Navbar.js
+
 import React, { useState } from 'react';
 import './Navbar.css';
 
@@ -10,23 +10,20 @@ function Navbar() {
 
   return (
     <div className="navbar-container">
-      {/* Logo block */}
+  
       <div className="logo-block">
       </div>
 
-      {/* Lines */}
  
       <div className="left-line" />
       <div className="right-line" />
 
-      {/* Hamburger icon */}
       <div className={`hamburger-icon ${isMobileMenuOpen ? 'open' : ''}`} onClick={toggleMenu}>
         <span></span>
         <span></span>
         <span></span>
       </div>
 
-      {/* Nav links */}
       <div className={`nav-links ${isMobileMenuOpen ? 'mobile-open' : ''}`}>
         <a href="#hero" onClick={closeMenu}>Home</a>
         <a href="#about" onClick={closeMenu}>About</a>
