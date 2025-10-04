@@ -1,0 +1,248 @@
+.char-counter {
+    font-size: 13px;
+    color: #555;
+    margin-top: 5px;
+    display: block;
+    font-weight: 500;
+}
+
+.char-counter.warning {
+    color: #f0ad4e;
+}
+
+.char-counter.danger {
+    color: #d9534f;
+}
+
+.pull-right {
+    text-align: right;
+}
+
+.form-container {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    padding: 20px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 500px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    animation: fadeInUp 0.8s ease;
+}
+
+.form-title {
+    text-align: center;
+    color: #333;
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    background: linear-gradient(135deg, #000, #000);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    color: #555;
+    font-weight: 500;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+input[type="text"],
+select {
+    width: 100%;
+    padding: 10px 20px;
+    border: 2px solid #e1e5e9;
+    border-radius: 12px;
+    font-size: 14px;
+    background: #f8f9fa;
+    transition: all 0.3s ease;
+    outline: none;
+    font-family: "Roboto Mono", monospace;
+}
+
+input[type="text"]:focus,
+select:focus {
+    border-color: #667eea;
+    background: #fff;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    transform: translateY(-2px);
+}
+
+/* Fix dropdown arrow repetition */
+select {
+    cursor: pointer;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23667eea' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+    background-position: right 16px center;
+    background-repeat: no-repeat;
+    background-size: 20px;
+    padding-right: 40px;
+    position: relative;
+}
+
+select:hover {
+    border-color: #667eea;
+    background-color: #fff;
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
+}
+
+select option {
+    padding: 12px 16px;
+    background: #fff;
+    color: #333;
+    font-size: 15px;
+    font-family: "Roboto Mono", monospace;
+    border: none;
+    margin: 2px 0;
+    transition: all 0.2s ease;
+}
+
+select option:hover {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+select option:checked {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    font-weight: 600;
+}
+
+select option:first-child {
+    color: #999;
+    font-style: italic;
+}
+
+/* Hide native IE arrow */
+select::-ms-expand {
+    display: none;
+}
+
+/* Hide Firefox inner focus border */
+select::-moz-focus-inner {
+    border: 0;
+}
+
+.save-btn {
+    width: 100%;
+    background: linear-gradient(135deg, #FE936E 0%, #FE936E 100%);
+    color: white;
+    padding: 12px 30px;
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    letter-spacing: 1px;
+    margin-top: 20px;
+}
+
+.save-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+}
+
+.save-btn:active {
+    transform: translateY(0);
+}
+
+.form-group:nth-child(even) {
+    animation: slideInLeft 0.6s ease;
+}
+
+.form-group:nth-child(odd) {
+    animation: slideInRight 0.6s ease;
+}
+
+@keyframes slideInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 480px) {
+    .form-container {
+        padding: 30px 20px;
+        margin: 10px;
+    }
+
+    .form-title {
+        font-size: 20px;
+    }
+}
+
+.success-message {
+    background: linear-gradient(135deg, #00b09b, #96c93d);
+    color: white;
+    padding: 15px;
+    border-radius: 12px;
+    text-align: center;
+    margin-top: 20px;
+    display: none;
+    animation: slideDown 0.5s ease;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Enhanced visual feedback for valid selections */
+select:valid:not([value=""]) {
+    border-color: #28a745;
+    background-color: #f8fff9;
+}
+
+select:valid:not([value=""]):focus {
+    border-color: #667eea;
+    background-color: #fff;
+}

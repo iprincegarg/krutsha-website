@@ -20,6 +20,11 @@
   font-family: 'Arial', sans-serif;
 }
 
+.logo img {
+  height: 2.5rem;
+  width: auto;
+}
+
 .top-line nav {
   display: flex;
   gap: 20px;
@@ -79,7 +84,7 @@
 
   .logo {
     font-size: 20px;
-   margin-left: 20px;
+    margin-left: 20px;
   }
 
   .top-line nav {

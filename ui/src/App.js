@@ -7,26 +7,28 @@ import HeroSection from './components/HeroSection';
 import ServiceSection from './components/ServiceSection';
 import About from './components/about';
 import FAQSection from './components/FAQSection';
-import ScrollToTop from './components/ScrollToTop'; 
+import ScrollToTop from './components/ScrollToTop';
 import Header from './components/header';
 import TermsOfService from './pages/TermsOfService';
 import RefundPolicy from './pages/RefundPolicy';
 import PrivacyPolicy from './pages/PrivacyPolicy';
+import UserRegistration from './pages/UserRegistration';
 
 function App() {
   return (
-    <Router basename="/kru">
+    <Router>
       <ScrollToTop />
- 
-      <Navbar />
+
+
 
       <Routes>
-       
+
         <Route
           path="/"
           element={
             <>
-            <Header />
+              <Navbar />
+              <Header />
               <HeroSection />
               <About />
               <ServiceSection />
@@ -40,6 +42,7 @@ function App() {
         <Route path="/terms-of-service" element={<TermsOfService />} />
         <Route path="/refund-policy" element={<RefundPolicy />} />
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+        <Route path='/user-registration' element={<UserRegistration />} />
       </Routes>
     </Router>
   );

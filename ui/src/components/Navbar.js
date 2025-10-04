@@ -10,11 +10,11 @@ function Navbar() {
 
   return (
     <div className="navbar-container">
-  
+
       <div className="logo-block">
       </div>
 
- 
+
       <div className="left-line" />
       <div className="right-line" />
 
@@ -27,9 +27,9 @@ function Navbar() {
       <div className={`nav-links ${isMobileMenuOpen ? 'mobile-open' : ''}`}>
         <a href="#hero" onClick={closeMenu}>Home</a>
         <a href="#about" onClick={closeMenu}>About</a>
-<a href="#services" onClick={closeMenu}>Services</a>  
+        <a href="#services" onClick={closeMenu}>Services</a>
         <a href="#faq" onClick={closeMenu}>Contact</a>
-        <a href="#start" className="start-now-btn not-hover-link" onClick={closeMenu}>
+        <a href="https://wa.me/919518075994?text=hello" className="start-now-btn not-hover-link">
           Start now <span className="arrow">↗</span>
         </a>
       </div>

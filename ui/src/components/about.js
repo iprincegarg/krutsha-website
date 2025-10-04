@@ -60,7 +60,7 @@ const About = () => {
             Get immediate answers to your academic questions. <br />
             We aim to enhance learning and provide tailored support, allowing you to focus on understanding and retaining information.
           </p>
-          <button className="start-button">Get Started Now ⟶</button>
+          <button className="start-button" onClick={()=> window.location.href = 'https://wa.me/919518075994?text=hello'}>Get Started Now ⟶</button>
         </div>
       </div>
     </section>
