@@ -35,7 +35,7 @@
 }
 
 .about-main-image {
-    flex: 1 1 45%;
+  flex: 1 1 45%;
   position: relative;
   max-width: 280px; 
   width: 100%;
@@ -103,8 +103,6 @@
   object-fit: contain;
   border-radius: 12px;
 }
-
-
 
 .bottom-images {
   display: flex;
