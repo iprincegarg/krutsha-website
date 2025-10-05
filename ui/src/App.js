@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import ContactSection from './components/ContactSection';
 import HeroSection from './components/HeroSection';
-import ServiceSection from './components/ServiceSection';
+import FeatureSection from './components/FeatureSection';
 import About from './components/about';
 import FAQSection from './components/FAQSection';
 import ScrollToTop from './components/ScrollToTop';
@@ -31,7 +31,7 @@ function App() {
               <Header />
               <HeroSection />
               <About />
-              <ServiceSection />
+              <FeatureSection />
               <FAQSection />
               <ContactSection />
             </>

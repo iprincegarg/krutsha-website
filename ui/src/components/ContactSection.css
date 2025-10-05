@@ -14,6 +14,18 @@
     margin-bottom: 0 !important;  
   }
 
+  a.contactlinks{
+  color: #333;
+  transition: color 0.3s ease, transform 0.3s ease;
+  text-decoration: none;
+  cursor: pointer;
+  }
+
+  a.contactlinks:hover {
+  color: #FE936E; 
+  transform: translateX(5px); 
+}
+
   .join-section h1 {
     font-size: 64px;
     margin-bottom: 40px;

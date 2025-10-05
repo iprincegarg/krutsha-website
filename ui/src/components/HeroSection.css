@@ -1,7 +1,7 @@
   .hero {
     display: flex;
     flex-wrap: wrap;
-    font-family: 'NordicPavilion', sans-serif;
+    font-family: 'Roboto Mono', sans-serif;
     justify-content: space-between;
     align-items: flex-start;
     padding: 120px 60px 80px;
@@ -27,10 +27,17 @@
     border-radius: 4px;
   }
 
+  .img-arrow{
+    width: 24px;
+    position: relative;
+    top:5px;
+    transform: rotate(-90deg);
+  }
+
   .hero-left h1 {
-    font-family: 'NordicPavilion', sans-serif;
+    font-family: 'Roboto Mono', sans-serif;
     font-weight: bold;
-    font-size: 60px;
+    font-size: 50px;
     line-height: 120%;
     letter-spacing: 3px;
     color: #000;
@@ -92,7 +99,7 @@
 
 @media (max-width: 1200px) {
   .hero-left h1 {
-    font-size: 42px;
+    font-size: 36px;
     max-width: 90%;
   }
 
@@ -167,7 +174,7 @@
     margin-top: 60px;
   }
 .hero-left h1 {
-  font-size: 50px;
+  font-size: 40px;
 }
  
 
@@ -201,7 +208,7 @@
   }
 
   .hero-left h1 {
-    font-size: 40px;
+    font-size: 30px;
     line-height: 1.2;
   }
 

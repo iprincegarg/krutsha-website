@@ -21,8 +21,9 @@
 }
 
 .logo img {
-  height: 2.5rem;
+  height: 4rem;
   width: auto;
+  padding-top: 15px;
 }
 
 .top-line nav {

@@ -1,10 +1,10 @@
 
 import React from 'react';
-import './ServiceSection.css';
+import './FeatureSection.css';
 
-function ServiceSection() {
+function FeatureSection() {
   return (
-    <section id="services" className="service-grid-section">
+    <section id="features" className="service-grid-section">
       <div className="safe-container">
         <div className="grid-container">
      
@@ -38,4 +38,4 @@ function ServiceSection() {
   );
 }
 
-export default ServiceSection;
+export default FeatureSection;
