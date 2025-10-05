@@ -72,7 +72,6 @@
   font-weight: bold;
   color: black;
   text-align: center;
-  transform: rotate(-270deg);
   display: inline-block;
   text-decoration: none;
   font-size: 16px;
@@ -83,7 +82,6 @@
 .start-now-btn:hover {
   background-color: #FE936E;
   color: white;
-  transform: rotate(-270deg) scale(1.05);
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
@@ -142,7 +140,12 @@
     align-items: center;
     justify-content: space-between;
     padding: 10px 20px;
-    position: relative;
+    position: fixed; /* Change from relative to fixed */
+    top: 0; /* Add this */
+    left: 0; /* Add this */
+    right: 0; /* Add this */
+    background-color: white; /* Add background so content doesn't show through */
+    z-index: 1000; /* Ensure it stays on top */
   }
    .top-line {
     position: absolute;
