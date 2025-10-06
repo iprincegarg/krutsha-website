@@ -8,23 +8,10 @@
   html, body {
     overflow-x: hidden;
     width: 100%;
-      margin: 0;
-    padding: 0;
-    box-sizing: border-box;
   }
-
-  @font-face {
-    font-family: 'NordicPavilion';
-    src: url('https://adityasharma016.github.io/kru/fonts/NordicPavilion.ttf') format('truetype');
-    font-weight: normal;
-    font-style: normal;
-  }
-
-
 
   body {
-    font-family: 'Roboto', sans-serif;
-    font-family: 'NordicPavilion', sans-serif;
+    font-family: 'Roboto Mono', sans-serif;
     background-color:#FCFBED;
     color: #000;
     line-height: 1.6;

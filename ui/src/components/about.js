@@ -1,16 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from "react";
 import './about.css';
 
 const About = () => {
-  const [showVideo, setShowVideo] = useState(false);
+const [showWebP, setShowWebP] = useState(false);
 
-  const handlePlayClick = () => {
-    setShowVideo(true);
-  };
-
-  const handleClose = () => {
-    setShowVideo(false);
-  };
+  useEffect(() => {
+    setShowWebP(true);
+  }, []);
 
   return (
     <section id="about" className="about-section">
@@ -28,24 +24,25 @@ const About = () => {
           </p>
         </div>
 
-        <div className="about-main-image">
-          {!showVideo && (
-            <>
-              <img src={`${process.env.PUBLIC_URL}/assets/about1.png`} alt="Main Mobile App" />
-              <div className="play-button" onClick={handlePlayClick}>▶</div>
-            </>
-          )}
+   <div className="about-main-image">
+      {!showWebP && (
+        <img
+          src={`${process.env.PUBLIC_URL}/assets/intro.webp`}
+          alt="Main Mobile App"
+          width="100%"
+          height="100%"
+        />
+      )}
 
-          {showVideo && (
-            <>
-              <span className="close-button" onClick={handleClose}>×</span>
-              <video controls autoPlay width="100%" height="100%">
-                <source src={`${process.env.PUBLIC_URL}/assets/intro.mp4`} type="video/mp4" />
-                Your browser does not support the video tag.
-              </video>
-            </>
-          )}
-        </div>
+      {showWebP && (
+        <img
+          src={`${process.env.PUBLIC_URL}/assets/intro.webp`}
+          alt="Intro Animation"
+          width="100%"
+          height="100%"
+        />
+      )}
+    </div>
       </div>
 
       <div className="about-bottom">
