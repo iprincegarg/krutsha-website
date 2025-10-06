@@ -86,7 +86,7 @@ const ContactSection = () => {
 
             <div className="footer-column">
               <h3>About us</h3>
-              <p><Link to="/terms-of-service" className="footer-link">Terms of Service</Link></p>
+              <p><Link to="/terms-and-conditions" className="footer-link">Terms and Conditions</Link></p>
               <p><Link to="/refund-policy" className="footer-link">Refund Policy</Link></p>
               <p><Link to="/privacy-policy" className="footer-link">Privacy Policy</Link></p>
             </div>          </div>

@@ -400,6 +400,14 @@ const UserRegistration = () => {
                 ))}
               </select>
             </div>
+            {
+              form?.is_registered !== "1" && <p>By signing up, you acknowledge and agree to Krutsha's
+                                              <a href="/terms-and-conditions" target="_blank">Terms & Conditions</a>
+                                              and
+                                              <a href="/privacy-policy" target="_blank">Privacy Policy</a>
+                                              .
+                                            </p>
+            }
 
             <button type="submit" className="save-btn" disabled={loading}>
               {loading
