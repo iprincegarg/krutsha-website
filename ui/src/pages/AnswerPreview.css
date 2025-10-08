@@ -1,0 +1,136 @@
+#answer-preview {
+    font-family: "Roboto Mono", Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    margin: 0;
+    padding: 20px;
+    background-color: #fcfbed;
+    color: #333;
+    display: flex;
+    gap: 24px;
+    height: 100vh;
+    box-sizing: border-box;
+    flex-direction: column;
+}
+
+#answer-preview .container {
+    display: flex;
+    gap: 24px;
+    flex-grow: 1;
+    min-height: 0;
+    justify-content: flex-start;
+    flex-direction: column;
+}
+
+#preview {
+    /* width: 70%; */
+    /* height: 100%; */
+    padding: 20px;
+    border-radius: 6px;
+    background-color: #fcfbed;
+    overflow-y: auto;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
+}
+
+/* Typography */
+#preview h1 {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+    font-weight: 700;
+    color: #222;
+}
+
+#preview h2 {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: #444;
+}
+
+#preview p {
+    font-size: 1rem;
+    margin-bottom: 1rem;
+    color: #555;
+}
+
+#preview ul {
+    list-style-type: disc;
+    padding-left: 1.5rem;
+    margin-bottom: 1rem;
+    color: #444;
+}
+
+hr {
+    border: none;
+    border-top: 1px solid #ddd;
+    margin: 2rem 0;
+}
+
+/* Table styling */
+#preview table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 1.5rem;
+    font-size: 1rem;
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.08);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+#preview th,
+#preview td {
+    border: 1px solid #ddd;
+    padding: 12px 15px;
+    text-align: left;
+    background-color: #fcfbed;
+}
+
+#preview th {
+    background-color: #f5946f;
+    font-weight: 600;
+    color: #222;
+}
+
+/* Responsive Table Container */
+#preview .table-responsive {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+}
+
+/* Zebra stripes for rows */
+#preview tbody tr:nth-child(odd) {
+    background-color: #fafafa;
+}
+
+strong,
+em {
+    color: #000;
+}
+
+/* Page break helpers for PDF generation */
+#preview h1,
+#preview h2,
+#preview h3,
+#preview h4,
+#preview h5,
+#preview h6 {
+    page-break-after: avoid;
+    break-after: avoid;
+}
+
+#preview p,
+#preview ul,
+#preview ol,
+#preview table {
+    page-break-inside: avoid;
+    break-inside: avoid;
+}
+
+#answer-preview .container .user-details .subject-details {
+    font-size: 12px;
+    color: darkslategrey;
+    padding-top: 12px;
+}
