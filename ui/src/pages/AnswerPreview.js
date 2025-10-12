@@ -35,7 +35,7 @@ export default function AnswerPreview() {
             setUserData(user);
             console.log("user:: ", user);
 
-            setMarkdownHtml(marked.parse(user.content));
+            setMarkdownHtml(marked.parse(user?.content));
 
         } catch (error) {
             console.error("error in validate key:: ", error);
@@ -78,17 +78,17 @@ export default function AnswerPreview() {
             <div className="container">
                 {
                     loading ?
-                        <p>Loading ....</p>
+                        <p style={{ textAlign: "center", margin: "auto" }}>Loading ....</p>
                         :
                         <>
                             {
                                 message ?
-                                    <p>{message}</p>
+                                    <p style={{textAlign: "center", margin: "auto"}} >{message}</p>
                                     :
                                     <>
                                         <div className="user-details">
-                                            <h2>{userData.type.toUpperCase()}</h2>
-                                            <p className="subject-details">{userData.class_name} | {userData.subject_name} | {userData.chapter_name}</p>
+                                            <h2>{userData?.type?.toUpperCase()}</h2>
+                                            <p className="subject-details">{userData?.class_name} | {userData?.subject_name} | {userData?.chapter_name}</p>
                                         </div>
                                         <div id="preview" dangerouslySetInnerHTML={{ __html: markdownHtml }}></div>
                                     </>
