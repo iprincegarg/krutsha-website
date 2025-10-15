@@ -1,17 +1,16 @@
 #answer-preview {
-    font-family: Verdana, sans-serif;
+    font-family: "Roboto Mono", Tahoma, Geneva, Verdana, sans-serif;
     font-size: 16px;
     line-height: 1.6;
     margin: 0;
-    background-color: #fff;
-    min-height: 100vh;
+    padding: 20px;
+    background-color: #fcfbed;
     color: #333;
     display: flex;
     gap: 24px;
+    height: 100vh;
     box-sizing: border-box;
     flex-direction: column;
-    overflow: visible !important;
-    position: relative !important;
 }
 
 #answer-preview .container {
@@ -21,21 +20,17 @@
     min-height: 0;
     justify-content: flex-start;
     flex-direction: column;
-    overflow: visible !important;
-}
-
-#answer-preview .container-fluid {
-    overflow: visible !important;
-    position: relative !important;
 }
 
 #preview {
+    /* width: 70%; */
+    /* height: 100%; */
     padding: 20px;
     border-radius: 6px;
-    background-color: #fff;
+    background-color: #fcfbed;
     overflow-y: auto;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
     box-sizing: border-box;
-    overflow-x: visible !important;
 }
 
 /* Typography */
@@ -134,62 +129,8 @@ em {
     break-inside: avoid;
 }
 
-.subject-details {
-    padding: 10px 0px 0px 10px;
-}
-
-/* Skimcard title inside markdown */
-.skimcard-title {
-    display: block;
-    font-weight: bold;
-    font-size: 1.4rem;
-    margin-top: 2rem;
-    color: #1a73e8;
-}
-
-/* Sticky right-hand menu - FIXED */
-.skimcard-menu {
-    position: fixed !important;
-    bottom: 100px !important;
-    right: 5px !important;
-    transform: none !important;
-    display: flex !important;
-    flex-direction: column !important;
-    gap: 10px !important;
-    z-index: 99999 !important;
-    background: rgba(255, 255, 255, 0.98) !important;
-    padding: 5px !important;
-    border-radius: 8px !important;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2) !important;
-    pointer-events: auto !important;
-    width: auto !important;
-    height: auto !important;
-    visibility: visible !important;
-    opacity: 1 !important;
-}
-
-.skimcard-menu button {
-    width: 28px !important;
-    height: 28px !important;
-    border-radius: 50% !important;
-    border: none !important;
-    background: #f0f0f0 !important;
-    color: #666 !important;
-    font-weight: bold !important;
-    cursor: pointer !important;
-    transition: all 0.3s ease !important;
-    font-size: 12px !important;
-    flex-shrink: 0 !important;
-    padding: 0 !important;
-    margin: 0 !important;
-}
-
-.skimcard-menu button:hover {
-    background: #e0e0e0 !important;
-    color: #333 !important;
-}
-
-.skimcard-menu button.active {
-    background: #1a73e8 !important;
-    color: #fff !important;
+#answer-preview .container .user-details .subject-details {
+    font-size: 12px;
+    color: darkslategrey;
+    padding-top: 12px;
 }
