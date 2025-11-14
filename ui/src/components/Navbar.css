@@ -147,7 +147,13 @@
     background-color: white; /* Add background so content doesn't show through */
     z-index: 1000; /* Ensure it stays on top */
   }
-   .top-line {
+
+  .left-line,
+  .right-line {
+    display: none;
+  }
+
+  .top-line {
     position: absolute;
     top: 60px;
     left: 0px;
@@ -224,16 +230,6 @@ position: absolute;
     font-size: 20px;
     margin-left: 10px;
   }
-
-  .right-line {
-  right: 20px;
-  width: 1px;
-}
-
-.left-line {
-  left: 20px;
-  width: 1px;
-}
 }
 
 .hamburger-icon {

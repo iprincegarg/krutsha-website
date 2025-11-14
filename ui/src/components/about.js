@@ -18,9 +18,8 @@ const [showWebP, setShowWebP] = useState(false);
           <h2>What is Krutsha AI?</h2>
           <p>
             <strong>
-              Krutsha Your 24x7 Smart Study Partner — Helping Student Learn Better, Score Higher, and Never Feel Stuck —
-            </strong>
-            because they’re never alone in their learning journey. We guide them, answer their questions, and help them succeed anytime, anywhere — with grade-specific, curriculum-aligned study content tailored to their academic needs.
+              Krutsha Your 24x7 Smart Study Partner — Helping Student Learn Better, Score Higher, and Never Feel Stuck — 
+            </strong> because they’re never alone in their learning journey. We guide them, answer their questions, and help them succeed anytime, anywhere — with grade-specific, curriculum-aligned study content tailored to their academic needs.
           </p>
         </div>
 

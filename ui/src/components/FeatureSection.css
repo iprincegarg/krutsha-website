@@ -33,6 +33,7 @@ ul{
   column-gap: 20px;
   row-gap: 40px;
   margin-bottom: 10px;
+  align-items: flex-start;
 }
 
 .feature-text {
@@ -123,8 +124,9 @@ ul{
   }
 
   .feature-text {
-  font-size: 14px;
-}
+    font-size: 14px;
+    flex: 1 1 100%;
+  }
 
   .grid-item {
     flex-direction: column;
@@ -136,14 +138,16 @@ ul{
   }
 
   .feature-top {
-    flex-wrap: nowrap; 
-    justify-content: space-between;
-  display: contents;
+    flex-wrap: wrap;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
   }
 
-  .feature-main-image{
+  .feature-main-image {
     position: relative;
-    left: 25%;
+    left: 0;
+    margin-top: 30px;
   }
   
   .text-block {
@@ -163,7 +167,7 @@ ul{
     margin-top: 30px;
   }
 
-    .service-grid-section {
+  .service-grid-section {
     margin-bottom: 50px;
   }
   
@@ -178,15 +182,17 @@ ul{
 
 @media (max-width: 768px) {
   .service-grid-section {
-    padding: 40px 80px;
+    padding: 40px 20px;
     box-sizing: border-box;
     width: 100%;
-    overflow: hidden;
+    overflow: visible;
+    margin-bottom: 50px;
   }
 
-    .feature-text {
-  font-size: 14px;
-}
+  .feature-text {
+    font-size: 14px;
+    flex: 1 1 100%;
+  }
 
   .grid-container {
     grid-template-columns: 1fr;
@@ -207,7 +213,7 @@ ul{
 
   .text-block {
     width: 100%;
-    padding: 0 70px;
+    padding: 0 20px;
     margin: 0;
     box-sizing: border-box;
     align-items: center;
@@ -223,34 +229,66 @@ ul{
     box-sizing: border-box;
     word-break: break-word;
     overflow-wrap: break-word;
-    font-size: 20px;
+    font-size: 18px;
     line-height: 1.4;
   }
 
   .text-block>*+* {
     margin-top: 20px;
   }
-}
 
-@media (max-width: 768px) and (min-width: 621px) {
-  .text-block {
-    padding: 0 70px;
+  .header h1 {
+    font-size: 2rem;
   }
 
-  .hero-sub-text,
-  .figma-paragraph {
-    font-size: 20px;
-    line-height: 1.4;
+  .header-subtitle {
+    font-size: 14px;
+  }
+  
+  .feature-header {
+    padding: 20px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+  
+  .feature-title h2 {
+    font-size: 18px;
+    text-align: left;
+  }
+  
+  .feature-title p {
+    font-size: 0.95rem;
+    text-align: left;
+  }
+
+  .feature-top {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .feature-main-image {
     width: 100%;
     max-width: 100%;
-    word-break: break-word;
-    overflow-wrap: break-word;
+    position: relative;
+    left: 0;
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+  }
+
+  .feature-main-image img {
+    width: 50%;
+    max-width: 100%;
+    padding: 0;
   }
 }
+
+
 
 @media (max-width: 480px) {
   .hero-sub-text {
-    font-size: 20px;
+    font-size: 18px;
   }
 
   .figma-paragraph {
@@ -264,66 +302,60 @@ ul{
   .text-block>*+* {
     margin-top: 20px;
   }
-    .header h1 {
-    font-size: 1.75rem;
+
+  .header h1 {
+    font-size: 1.5rem;
   }
   
   .header-subtitle {
-    font-size: 1rem;
+    font-size: 0.9rem;
   }
   
   .feature-title h2 {
-    font-size: 20px;
+    font-size: 16px;
   }
   
   .feature-title p {
-    font-size: 0.95rem;
+    font-size: 0.9rem;
+  }
+
+  .feature-header {
+    padding: 15px;
+    gap: 12px;
+  }
+
+  .icon-wrapper {
+    width: 50px;
+    height: 50px;
   }
   
-  
   .features-list {
-    gap: 20px;
+    gap: 15px;
+    padding: 15px 0;
   }
   
   .feature-text {
-    font-size: 0.95rem;
+    font-size: 0.9rem;
   }
-}
 
-@media (max-width: 768px) {
   .service-grid-section {
-    margin-bottom: 50px;
+    padding: 30px 15px;
   }
 
-    .header h1 {
-    font-size: 2rem;
+  .feature-main-image {
+    margin-top: 15px;
+    display: flex;
+    justify-content: center;
   }
 
-    .feature-text {
-  font-size: 14px;
+  .feature-main-image img {
+    width: 50%;
+    max-width: 100%;
+    padding: 10px;
+  }
 }
-  
-  .header-subtitle {
-    font-size: 12px;
-  }
-  
-  .feature-header {
-    padding: 20px;
-    flex-direction: column;
-    align-items: flex-start;
-  }
-  
-  .feature-title h2 {
-    font-size: 20px;
-    text-align: center;
-  }
-  
-  .feature-title p {
-    font-size: 1rem;
-    text-align: center;
-  }
-  
-}
+
+
 
 
 @media (max-width: 1388px) and (min-width: 1025px) {
@@ -387,6 +419,7 @@ ul{
 
     .feature-header {
     padding: 28px 35px;
+    
   }
   
   .feature-title h2 {
@@ -424,7 +457,8 @@ ul{
   background: transparent;
   border-radius: 24px;
   border: 1px solid #000;
-  overflow: hidden;
+  overflow: visible;
+  margin-bottom: 30px;
 }
 
 .feature-header {
@@ -432,6 +466,7 @@ ul{
   display: flex;
   align-items: center;
   gap: 20px;
+  border-radius: 24px;
 }
 
 .icon-wrapper {

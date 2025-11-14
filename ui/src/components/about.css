@@ -376,7 +376,6 @@
   .about-text h2 {
     text-align: left;
     font-size: 24px;
-    margin-left: 50px;
   }
 
   .about-text p {
@@ -384,7 +383,6 @@
     margin-top: 16px;
     text-align: left;
     max-width: 110%;
-    margin: 0px 50px;
   }
   
 

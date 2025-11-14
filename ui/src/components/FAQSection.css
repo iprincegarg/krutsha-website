@@ -229,7 +229,7 @@
     }
 
     .faq-image img {
-      max-width: 80%;
+      max-width: 100%;
     }
 
     .faq-content {
@@ -259,7 +259,6 @@
 
     .faq-container {
       padding: 0 16px;
-      margin: 0px 50px;
     }
 
     .faq-heading {
