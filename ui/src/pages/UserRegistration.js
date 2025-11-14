@@ -6,6 +6,7 @@ import axios from 'axios';
 
 const VALIDATE_KEY_URL = 'https://krutsha.ireavaschool.in/validate-registration-key';
 const UPDATE_USER_URL = 'https://krutsha.ireavaschool.in/update-user-details';
+const GET_BOARD_LIST_URL = 'https://krutsha.ireavaschool.in/get-board-list';
 const GET_CLASS_LIST_URL = 'https://krutsha.ireavaschool.in/get-class-list';
 const GET_SUBJECT_LIST_URL = 'https://krutsha.ireavaschool.in/get-subject-list';
 const GET_CHAPTER_LIST_URL = 'https://krutsha.ireavaschool.in/get-chapter-list';
@@ -20,9 +21,10 @@ const UserRegistration = () => {
   // form state (controlled inputs)
   const [form, setForm] = useState({
     id: null,
+    board_id: "",
     class_id: "",
-    subject_id: "",
-    chapter_id: "",
+    //subject_id: "",
+    //chapter_id: "",
     name: "",
     phone_number: "",
     is_registered: 0,
@@ -30,6 +32,7 @@ const UserRegistration = () => {
   });
 
   // dropdown data states
+  const [boardList, setBoardList] = useState([]);
   const [classList, setClassList] = useState([]);
   const [subjectList, setSubjectList] = useState([]);
   const [chapterList, setChapterList] = useState([]);
@@ -39,9 +42,21 @@ const UserRegistration = () => {
   const [loadingChapters, setLoadingChapters] = useState(false);
 
   // fetch class list
-  async function fetchClassList() {
+  async function fetchBoardList() {
     try {
-      const { data } = await axios.get(GET_CLASS_LIST_URL);
+      const { data } = await axios.get(GET_BOARD_LIST_URL);
+      if (data && data.success && data.data) {
+        setBoardList(data.data);
+      }
+    } catch (error) {
+      console.error("Error fetching board list:", error);
+    }
+  }
+
+  // fetch class list
+  async function fetchClassList(boardId) {
+    try {
+      const { data } = await axios.get(`${GET_CLASS_LIST_URL}?board_id=${boardId}`);
       if (data && data.success && data.data) {
         setClassList(data.data);
       }
@@ -50,51 +65,51 @@ const UserRegistration = () => {
     }
   }
 
-  // fetch subject list based on class_id
-  async function fetchSubjectList(classId) {
-    if (!classId) {
-      setSubjectList([]);
-      return;
-    }
+  // // fetch subject list based on class_id
+  // async function fetchSubjectList(classId) {
+  //   if (!classId) {
+  //     setSubjectList([]);
+  //     return;
+  //   }
 
-    setLoadingSubjects(true);
-    try {
-      const { data } = await axios.get(`${GET_SUBJECT_LIST_URL}?class_id=${classId}`);
-      if (data && data.success && data.data) {
-        setSubjectList(data.data);
-      } else {
-        setSubjectList([]);
-      }
-    } catch (error) {
-      console.error("Error fetching subject list:", error);
-      setSubjectList([]);
-    } finally {
-      setLoadingSubjects(false);
-    }
-  }
+  //   setLoadingSubjects(true);
+  //   try {
+  //     const { data } = await axios.get(`${GET_SUBJECT_LIST_URL}?class_id=${classId}`);
+  //     if (data && data.success && data.data) {
+  //       setSubjectList(data.data);
+  //     } else {
+  //       setSubjectList([]);
+  //     }
+  //   } catch (error) {
+  //     console.error("Error fetching subject list:", error);
+  //     setSubjectList([]);
+  //   } finally {
+  //     setLoadingSubjects(false);
+  //   }
+  // }
 
-  // fetch chapter list based on class_id and subject_id
-  async function fetchChapterList(classId, subjectId) {
-    if (!classId || !subjectId) {
-      setChapterList([]);
-      return;
-    }
+  // // fetch chapter list based on class_id and subject_id
+  // async function fetchChapterList(classId, subjectId) {
+  //   if (!classId || !subjectId) {
+  //     setChapterList([]);
+  //     return;
+  //   }
 
-    setLoadingChapters(true);
-    try {
-      const { data } = await axios.get(`${GET_CHAPTER_LIST_URL}?class_id=${classId}&subject_id=${subjectId}`);
-      if (data && data.success && data.data) {
-        setChapterList(data.data);
-      } else {
-        setChapterList([]);
-      }
-    } catch (error) {
-      console.error("Error fetching chapter list:", error);
-      setChapterList([]);
-    } finally {
-      setLoadingChapters(false);
-    }
-  }
+  //   setLoadingChapters(true);
+  //   try {
+  //     const { data } = await axios.get(`${GET_CHAPTER_LIST_URL}?class_id=${classId}&subject_id=${subjectId}`);
+  //     if (data && data.success && data.data) {
+  //       setChapterList(data.data);
+  //     } else {
+  //       setChapterList([]);
+  //     }
+  //   } catch (error) {
+  //     console.error("Error fetching chapter list:", error);
+  //     setChapterList([]);
+  //   } finally {
+  //     setLoadingChapters(false);
+  //   }
+  // }
 
   // validateKey -> fetch decode-key and prefills form
   async function validateKey(key) {
@@ -121,9 +136,10 @@ const UserRegistration = () => {
       // normalize fields - ensure keys match form state
       const newForm = {
         id: user.id ?? null,
+        board_id: user.board_id ?? "",
         class_id: user.class_id ?? "",
-        subject_id: user.subject_id ?? "",
-        chapter_id: user.chapter_id ?? "",
+        //subject_id: user.subject_id ?? "",
+        //chapter_id: user.chapter_id ?? "",
         name: user.name ?? "",
         phone_number: user.phone_number,
         is_registered: user.is_registered ?? 0,
@@ -133,13 +149,13 @@ const UserRegistration = () => {
       setForm(newForm);
 
       // fetch dependent dropdown data if values are present
-      if (newForm.class_id) {
-        await fetchSubjectList(newForm.class_id);
+      // if (newForm.class_id) {
+      //   await fetchSubjectList(newForm.class_id);
 
-        if (newForm.subject_id) {
-          await fetchChapterList(newForm.class_id, newForm.subject_id);
-        }
-      }
+      //   if (newForm.subject_id) {
+      //     await fetchChapterList(newForm.class_id, newForm.subject_id);
+      //   }
+      // }
 
       setLoading(false);
     } catch (error) {
@@ -158,8 +174,9 @@ const UserRegistration = () => {
     }
 
     // fetch class list first
-    fetchClassList();
+    fetchBoardList();
     validateKey(key);
+    // setLoading(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams, navigate]);
 
@@ -170,42 +187,65 @@ const UserRegistration = () => {
   function handleChange(e) {
     const { name, value } = e.target;
 
-    if (name === 'class') {
+    if (name === 'board') {
       setForm((s) => ({
         ...s,
-        class_id: value,
-        subject_id: "", // reset subject when class changes
-        chapter_id: ""  // reset chapter when class changes
+        board_id: value,
+        class_id: "",
+        //subject_id: "", // reset subject when class changes
+        //chapter_id: ""  // reset chapter when class changes
       }));
 
       // clear dependent dropdowns
-      setSubjectList([]);
-      setChapterList([]);
+      setClassList([]);
+      // setSubjectList([]);
+      // setChapterList([]);
 
       // fetch subjects for new class
       if (value) {
-        fetchSubjectList(value);
+        fetchClassList(value);
       }
 
-    } else if (name === 'subject') {
+    }
+    else if (name === 'class') {
       setForm((s) => ({
         ...s,
-        subject_id: value,
-        chapter_id: "" // reset chapter when subject changes
+        class_id: value,
+        // subject_id: "", // reset subject when class changes
+        // chapter_id: ""  // reset chapter when class changes
       }));
 
-      // clear chapters
-      setChapterList([]);
+      // clear dependent dropdowns
+      // setSubjectList([]);
+      // setChapterList([]);
 
-      // fetch chapters for new subject
-      if (value && form.class_id) {
-        fetchChapterList(form.class_id, value);
+      // fetch subjects for new class
+      if (value) {
+        // fetchSubjectList(value);
       }
 
-    } else if (name === 'chapter') {
-      setForm((s) => ({ ...s, chapter_id: value }));
+    } 
+    // else if (name === 'subject') {
+    //   setForm((s) => ({
+    //     ...s,
+    //     subject_id: value,
+    //     chapter_id: "" // reset chapter when subject changes
+    //   }));
 
-    } else if (name === 'name') {
+    //   // clear chapters
+    //   setChapterList([]);
+
+    //   // fetch chapters for new subject
+    //   if (value && form.class_id) {
+    //     // fetchChapterList(form.class_id, value);
+    //   }
+
+    // } 
+    // else if (name === 'chapter') {
+    //   setForm((s) => ({ ...s, chapter_id: value }));
+
+    // } 
+    else if (name === 'name') {
       // limit to 24 characters if you want
       const truncated = value.slice(0, 24);
       setForm((s) => ({ ...s, name: truncated }));
@@ -220,7 +260,7 @@ const UserRegistration = () => {
     setErrorMessage("");
 
     // basic validation
-    if (!form.name || !form.class_id || !form.subject_id || !form.chapter_id) {
+    if (!form.name || !form.board_id || !form.class_id) {
       setErrorMessage("Please fill all fields.");
       return;
     }
@@ -228,9 +268,10 @@ const UserRegistration = () => {
     // payload - adapt to backend expected keys
     const payload = {
       id: form.id,
+      board_id: parseInt(form.board_id),
       class_id: parseInt(form.class_id), // ensure it's integer
-      subject_id: parseInt(form.subject_id), // ensure it's integer
-      chapter_id: parseInt(form.chapter_id), // ensure it's integer
+      //subject_id: parseInt(form.subject_id), // ensure it's integer
+      //chapter_id: parseInt(form.chapter_id), // ensure it's integer
       name: form.name.trim(),
       key: searchParams.get('key'),
       is_registered: form.is_registered
@@ -349,6 +390,19 @@ const UserRegistration = () => {
               </span>
             </div>
 
+            
+            <div className="form-group">
+              <label htmlFor="board">Select Board</label>
+              <select id="board" name="board" value={form.board_id} onChange={handleChange}>
+                <option value="">Choose a board...</option>
+                {boardList.map((boardItem) => (
+                  <option key={boardItem.id} value={boardItem.id}>
+                    {boardItem.title}
+                  </option>
+                ))}
+              </select>
+            </div>
+            
             <div className="form-group">
               <label htmlFor="class">Select Class</label>
               <select id="class" name="class" value={form.class_id} onChange={handleChange}>
@@ -361,7 +415,7 @@ const UserRegistration = () => {
               </select>
             </div>
 
-            <div className="form-group">
+            {/* <div className="form-group">
               <label htmlFor="subject">Select Subject</label>
               <select
                 id="subject"
@@ -379,9 +433,9 @@ const UserRegistration = () => {
                   </option>
                 ))}
               </select>
-            </div>
+            </div> */}
 
-            <div className="form-group">
+            {/* <div className="form-group">
               <label htmlFor="chapter">Select Chapter</label>
               <select
                 id="chapter"
@@ -399,7 +453,7 @@ const UserRegistration = () => {
                   </option>
                 ))}
               </select>
-            </div>
+            </div> */}
             {
               form?.is_registered !== "1" && <p>By signing up, you acknowledge and agree to Krutsha's
                                               <a href="/terms-and-conditions" target="_blank">Terms & Conditions</a>
