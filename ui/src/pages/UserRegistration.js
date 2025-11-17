@@ -54,9 +54,13 @@ const UserRegistration = () => {
   }
 
   // fetch class list
-  async function fetchClassList(boardId) {
+  async function fetchClassList(boardId = null) {
     try {
-      const { data } = await axios.get(`${GET_CLASS_LIST_URL}?board_id=${boardId}`);
+      let URL = GET_CLASS_LIST_URL;
+      if(boardId){
+        URL = `${GET_CLASS_LIST_URL}?board_id=${boardId}`;
+      }
+      const { data } = await axios.get(URL);
       if (data && data.success && data.data) {
         setClassList(data.data);
       }
@@ -175,6 +179,7 @@ const UserRegistration = () => {
 
     // fetch class list first
     fetchBoardList();
+    fetchClassList();
     validateKey(key);
     // setLoading(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
