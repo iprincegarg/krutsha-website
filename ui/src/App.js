@@ -13,6 +13,7 @@ import PrivacyPolicy from './pages/PrivacyPolicy';
 import UserRegistration from './pages/UserRegistration';
 import TermsAndConditions  from "./pages/TermsAndConditions";
 import AnswerPreview from './pages/AnswerPreview.js';
+import Notes from './pages/notes/index.jsx';
 
 function App() {
   return (
@@ -40,6 +41,7 @@ function App() {
         <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
         <Route path="/refund-policy" element={<RefundPolicy />} />
         <Route path='/answer-preview' element={<AnswerPreview />} />
+        <Route path='/notes' element={<Notes />} />
       </Routes>
     </Router>
   );

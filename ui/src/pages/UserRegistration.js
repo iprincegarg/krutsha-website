@@ -8,8 +8,6 @@ const VALIDATE_KEY_URL = 'https://krutsha.ireavaschool.in/validate-registration-
 const UPDATE_USER_URL = 'https://krutsha.ireavaschool.in/update-user-details';
 const GET_BOARD_LIST_URL = 'https://krutsha.ireavaschool.in/get-board-list';
 const GET_CLASS_LIST_URL = 'https://krutsha.ireavaschool.in/get-class-list';
-const GET_SUBJECT_LIST_URL = 'https://krutsha.ireavaschool.in/get-subject-list';
-const GET_CHAPTER_LIST_URL = 'https://krutsha.ireavaschool.in/get-chapter-list';
 
 const UserRegistration = () => {
   const navigate = useNavigate();
@@ -23,8 +21,6 @@ const UserRegistration = () => {
     id: null,
     board_id: "",
     class_id: "",
-    //subject_id: "",
-    //chapter_id: "",
     name: "",
     phone_number: "",
     is_registered: 0,
@@ -34,12 +30,6 @@ const UserRegistration = () => {
   // dropdown data states
   const [boardList, setBoardList] = useState([]);
   const [classList, setClassList] = useState([]);
-  const [subjectList, setSubjectList] = useState([]);
-  const [chapterList, setChapterList] = useState([]);
-
-  // loading states for dropdowns
-  const [loadingSubjects, setLoadingSubjects] = useState(false);
-  const [loadingChapters, setLoadingChapters] = useState(false);
 
   // fetch class list
   async function fetchBoardList() {
@@ -68,52 +58,6 @@ const UserRegistration = () => {
       console.error("Error fetching class list:", error);
     }
   }
-
-  // // fetch subject list based on class_id
-  // async function fetchSubjectList(classId) {
-  //   if (!classId) {
-  //     setSubjectList([]);
-  //     return;
-  //   }
-
-  //   setLoadingSubjects(true);
-  //   try {
-  //     const { data } = await axios.get(`${GET_SUBJECT_LIST_URL}?class_id=${classId}`);
-  //     if (data && data.success && data.data) {
-  //       setSubjectList(data.data);
-  //     } else {
-  //       setSubjectList([]);
-  //     }
-  //   } catch (error) {
-  //     console.error("Error fetching subject list:", error);
-  //     setSubjectList([]);
-  //   } finally {
-  //     setLoadingSubjects(false);
-  //   }
-  // }
-
-  // // fetch chapter list based on class_id and subject_id
-  // async function fetchChapterList(classId, subjectId) {
-  //   if (!classId || !subjectId) {
-  //     setChapterList([]);
-  //     return;
-  //   }
-
-  //   setLoadingChapters(true);
-  //   try {
-  //     const { data } = await axios.get(`${GET_CHAPTER_LIST_URL}?class_id=${classId}&subject_id=${subjectId}`);
-  //     if (data && data.success && data.data) {
-  //       setChapterList(data.data);
-  //     } else {
-  //       setChapterList([]);
-  //     }
-  //   } catch (error) {
-  //     console.error("Error fetching chapter list:", error);
-  //     setChapterList([]);
-  //   } finally {
-  //     setLoadingChapters(false);
-  //   }
-  // }
 
   // validateKey -> fetch decode-key and prefills form
   async function validateKey(key) {
@@ -197,14 +141,10 @@ const UserRegistration = () => {
         ...s,
         board_id: value,
         class_id: "",
-        //subject_id: "", // reset subject when class changes
-        //chapter_id: ""  // reset chapter when class changes
       }));
 
       // clear dependent dropdowns
       setClassList([]);
-      // setSubjectList([]);
-      // setChapterList([]);
 
       // fetch subjects for new class
       if (value) {
@@ -216,40 +156,9 @@ const UserRegistration = () => {
       setForm((s) => ({
         ...s,
         class_id: value,
-        // subject_id: "", // reset subject when class changes
-        // chapter_id: ""  // reset chapter when class changes
       }));
 
-      // clear dependent dropdowns
-      // setSubjectList([]);
-      // setChapterList([]);
-
-      // fetch subjects for new class
-      if (value) {
-        // fetchSubjectList(value);
-      }
-
     } 
-    // else if (name === 'subject') {
-    //   setForm((s) => ({
-    //     ...s,
-    //     subject_id: value,
-    //     chapter_id: "" // reset chapter when subject changes
-    //   }));
-
-    //   // clear chapters
-    //   setChapterList([]);
-
-    //   // fetch chapters for new subject
-    //   if (value && form.class_id) {
-    //     // fetchChapterList(form.class_id, value);
-    //   }
-
-    // } 
-    // else if (name === 'chapter') {
-    //   setForm((s) => ({ ...s, chapter_id: value }));
-
-    // } 
     else if (name === 'name') {
       // limit to 24 characters if you want
       const truncated = value.slice(0, 24);
@@ -274,9 +183,7 @@ const UserRegistration = () => {
     const payload = {
       id: form.id,
       board_id: parseInt(form.board_id),
-      class_id: parseInt(form.class_id), // ensure it's integer
-      //subject_id: parseInt(form.subject_id), // ensure it's integer
-      //chapter_id: parseInt(form.chapter_id), // ensure it's integer
+      class_id: parseInt(form.class_id),
       name: form.name.trim(),
       key: searchParams.get('key'),
       is_registered: form.is_registered
