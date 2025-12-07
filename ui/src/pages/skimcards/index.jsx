@@ -321,7 +321,7 @@ const Skimcards = ({ grade = '11', subject = 'Physics', chapter = '1' }) => {
         if (!frontRef.current) return;
 
         if (!notesContent) {
-            frontRef.current.innerHTML = '<div style="text-align:center; padding: 20px;">Please select the publish year, class, subject, and chapter to access the skimcards.</div>';
+            frontRef.current.innerHTML = '<div style="text-align:center; padding: 20px;">Please select the publisher, class, subject, and chapter to access the skimcards.</div>';
         } else {
             const htmlContent = parseMarkdown(notesContent);
             frontRef.current.innerHTML = htmlContent;
