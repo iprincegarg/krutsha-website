@@ -9,9 +9,9 @@ const GET_PUBLISHER_LIST_URL = 'https://krutsha.ireavaschool.in/get-publishers-l
 const GET_PUBLISHER_CLASS_LIST_URL = 'https://krutsha.ireavaschool.in/get-publisher-class-list';
 const GET_SUBJECT_LIST_URL = 'https://krutsha.ireavaschool.in/get-subject-list';
 const GET_CHAPTER_LIST_URL = 'https://krutsha.ireavaschool.in/get-chapter-list';
-const GET_NOTES_URL = 'https://krutsha.ireavaschool.in/get-notes-by-chapter-id';
+const GET_SKIMCARDS_URL = 'https://krutsha.ireavaschool.in/get-skimcards-by-chapter-id';
 
-const Notes = ({ grade = '11', subject = 'Physics', chapter = '1' }) => {
+const Skimcards = ({ grade = '11', subject = 'Physics', chapter = '1' }) => {
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
     const frontRef = useRef(null);
@@ -27,6 +27,7 @@ const Notes = ({ grade = '11', subject = 'Physics', chapter = '1' }) => {
     const [chapterList, setChapterList] = useState([]);
     const [notesContent, setNotesContent] = useState("");
     const [selectedClass, setSelectedClass] = useState({});
+    const [answerType, setAnswerType] = useState('notes');
     const [form, setForm] = useState({
         id: null,
         publisher_id: "",
@@ -71,8 +72,9 @@ const Notes = ({ grade = '11', subject = 'Physics', chapter = '1' }) => {
                 is_registered: user.is_registered ?? 0,
                 brand_number: user.brand_number ?? null
             };
-
-            fetchPublisherClassList(newForm.publisher_id);
+            setAnswerType(user.token_type || 'notes');
+            await fetchPublisherClassList(newForm.publisher_id);
+            await fetchSubjectList(newForm.class_id);
             if (newForm.class_id) {
                 fetchSubjectList(newForm.class_id);
             }
@@ -139,7 +141,7 @@ const Notes = ({ grade = '11', subject = 'Physics', chapter = '1' }) => {
 
     async function fetchNotes(chapterId) {
         try {
-            const { data } = await axios.get(GET_NOTES_URL, { params: { chapter_id: chapterId } });
+            const { data } = await axios.get(GET_SKIMCARDS_URL, { params: { chapter_id: chapterId } });
             if (data && data.success && data.data) {
                 if (data.data.length == 0) {
                     setNotesContent(data.message);
@@ -389,7 +391,7 @@ const Notes = ({ grade = '11', subject = 'Physics', chapter = '1' }) => {
             </div>
 
             <div className="user-details">
-                <div style={{ fontWeight: 700, fontSize: '1.05rem' }}>Notes</div>
+                <div style={{ fontWeight: 700, fontSize: '1.05rem' }}>Skimcards</div>
                 <div style={{ color: '#4b5563' }}>
                     {(() => {
                         const parts = [];
@@ -412,4 +414,4 @@ const Notes = ({ grade = '11', subject = 'Physics', chapter = '1' }) => {
     );
 };
 
-export default Notes;
+export default Skimcards;
