@@ -48,7 +48,7 @@ const ContactSection = () => {
           <div className="footer-left">
 
             <img
-              src={`${process.env.PUBLIC_URL}/assets/logo.png`}
+              src={`${process.env.PUBLIC_URL}/assets/Logo.png`}
               alt="Krutsha Logo"
               className="footer-logo"
             />

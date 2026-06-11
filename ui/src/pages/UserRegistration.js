@@ -271,7 +271,7 @@ const UserRegistration = () => {
       <div style={{ display: "flex", justifyContent: "center", paddingTop: "15px", paddingBottom: "15px" }}>
         <div className="form-container">
           <img
-            src={`${process.env.PUBLIC_URL}/assets/logo.png`}
+            src={`${process.env.PUBLIC_URL}/assets/Logo.png`}
             alt="Krutsha Logo"
             style={{
               display: "block",
