@@ -38,9 +38,9 @@ function App() {
 
         {/* Separate Full Page Routes */}
         <Route path='/user-registration' element={<UserRegistration />} />
-        <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-        <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
-        <Route path="/refund-policy" element={<RefundPolicy />} />
+        <Route path="/privacy-policy" element={<><Navbar /><Header /><PrivacyPolicy /><ContactSection /></>} />
+        <Route path="/terms-and-conditions" element={<><Navbar /><Header /><TermsAndConditions /><ContactSection /></>} />
+        <Route path="/refund-policy" element={<><Navbar /><Header /><RefundPolicy /><ContactSection /></>} />
         <Route path='/answer-preview' element={<AnswerPreview />} />
         <Route path='/notes' element={<Notes />} />
         <Route path='/skimcards' element={<Skimcards />} />

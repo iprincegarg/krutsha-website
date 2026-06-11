@@ -1,16 +1,25 @@
 
 import React, { useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import './Navbar.css';
 
 function Navbar() {
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const scrollToSection = (id) => {
-  const section = document.getElementById(id);
-  if (section) {
-    section.scrollIntoView({ behavior: 'smooth' });
-    closeMenu(); // closes mobile menu
-  }
-};
+  const location = useLocation();
+
+  const handleNavClick = (e, id) => {
+    // If we are already on the home page, smoothly scroll to the section
+    if (location.pathname === '/') {
+      e.preventDefault();
+      const section = document.getElementById(id);
+      if (section) {
+        section.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+    // Otherwise, the browser will naturally follow the href="/#id" and navigate back to the home page!
+    closeMenu();
+  };
+
   const toggleMenu = () => setMobileMenuOpen(!isMobileMenuOpen);
   const closeMenu = () => setMobileMenuOpen(false);
 
@@ -31,11 +40,11 @@ function Navbar() {
       </div>
 
       <div className={`nav-links ${isMobileMenuOpen ? 'mobile-open' : ''}`}>
-<a href="#hero" onClick={(e) => {e.preventDefault(); scrollToSection('hero');}}>Home</a>
-        <a href="#about" onClick={(e) => {e.preventDefault(); scrollToSection('about');}}>About</a>
-        <a href="#features" onClick={(e) => {e.preventDefault(); scrollToSection('features');}}>Features</a>
-        <a href="#contact" onClick={(e) => {e.preventDefault(); scrollToSection('contact');}}>Contact</a>
-        <a href="https://wa.me/919518075994?text=hello" target="_blank" className="start-now-btn not-hover-link">
+        <a href="/#hero" onClick={(e) => handleNavClick(e, 'hero')}>Home</a>
+        <a href="/#about" onClick={(e) => handleNavClick(e, 'about')}>About</a>
+        <a href="/#features" onClick={(e) => handleNavClick(e, 'features')}>Features</a>
+        <a href="/#contact" onClick={(e) => handleNavClick(e, 'contact')}>Contact</a>
+        <a href="https://wa.me/919518075994?text=hello" target="_blank" rel="noreferrer" className="start-now-btn not-hover-link">
           Start now <span className="arrow"><img src={`${process.env.PUBLIC_URL}/assets/arrow.png`} alt="arrow" className='img-arrow'/></span>
         </a>
       </div>

@@ -60,9 +60,28 @@
 .privacy-page {
   font-family: 'roboto mono', sans-serif;
   line-height: 1.6;
-  margin: 2rem;
+  padding: 100px 70px;
+  box-sizing: border-box;
   background-color: #fcfbed;
   color: #333;
+}
+
+@media (max-width: 1024px) {
+  .privacy-page {
+    padding: 80px 40px;
+  }
+}
+
+@media (max-width: 768px) {
+  .privacy-page {
+    padding: 80px 24px;
+  }
+}
+
+@media (max-width: 480px) {
+  .privacy-page {
+    padding: 70px 15px;
+  }
 }
 
 .privacy-page h1 {
