@@ -79,7 +79,7 @@ const ContactSection = () => {
 
             <div className="footer-column">
               <h3>Let’s Talk</h3>
-              <p>For Business</p>
+              <p><a href="mailto:hello@krutsha.app" className="footer-link">For Business</a></p>
             </div>
 
             <div className="footer-column">

@@ -18,208 +18,249 @@ function FeatureSection() {
         <div className="feature-card">
           <div className="feature-header" style={{ backgroundColor: '#BACDEC' }}>
             <div className="icon-wrapper">
-        <img
-          src={`${process.env.PUBLIC_URL}/assets/notes.png`}
-          alt="notes"
-          width="100%"
-          height="100%"
-        />
+              <img
+                src={`${process.env.PUBLIC_URL}/assets/notes.png`}
+                alt="learn"
+                width="100%"
+                height="100%"
+              />
             </div>
             <div className="feature-title">
-              <h2>Notes</h2>
-              <p>Get instant access to comprehensive, well-organized study notes for any chapter or topic.</p>
+              <h2>Learn</h2>
+              <p>Master your curriculum with comprehensive notes, skimcards, formulas, and Q&A.</p>
             </div>
           </div>
 
-  <div className="feature-top">
-        <div className="feature-text">
-          <ul>  
-            <li><img src={`${process.env.PUBLIC_URL}/assets/checkmark.png`} alt="checkmark" className="checkmark"/>
-            <strong>
-              Well organized by class, subject, & chapter.
-            </strong></li>
-              <li><img src={`${process.env.PUBLIC_URL}/assets/checkmark.png`} alt="checkmark" className="checkmark"/>
-            <strong>
-              Comprehensive coverage of the entire curriculum for quick revision.
-            </strong></li>
-            <li><img src={`${process.env.PUBLIC_URL}/assets/checkmark.png`} alt="checkmark" className="checkmark"/>
-            <strong>
-              Accessible 24/7, whenever you need them.
-            </strong></li>
-              <li><img src={`${process.env.PUBLIC_URL}/assets/checkmark.png`} alt="checkmark" className="checkmark"/>
-            <strong>
-              Designed for effective learning with clear structure & formatting.
-            </strong></li>
-              <li><img src={`${process.env.PUBLIC_URL}/assets/checkmark.png`} alt="checkmark" className="checkmark"/>
-            <strong>
-              Save hours of preparation with concise and focused notes.
-            </strong></li>
-              <li><img src={`${process.env.PUBLIC_URL}/assets/checkmark.png`} alt="checkmark" className="checkmark"/>
-            <strong>
-              Trusted by students for fast revision before exams.
-            </strong></li>
-          </ul>
-        </div>
-
-   <div className="feature-main-image">
-      {!showWebP && (
-        <img
-          src={`${process.env.PUBLIC_URL}/assets/intro.webp`}
-          alt="notes"
-          width="100%"
-          height="100%"
-        />
-      )}
-
-      {showWebP && (
-        <img
-          src={`${process.env.PUBLIC_URL}/assets/intro.webp`}
-          alt="notes"
-          width="100%"
-          height="100%"
-        />
-      )}
-    </div>
-      </div>
-        </div>
-<br/>
-     <div className="feature-card">
-          <div className="feature-header" style={{ backgroundColor: '#FED05C' }}>
-            <div className="icon-wrapper">
-        <img
-          src={`${process.env.PUBLIC_URL}/assets/skimcard.png`}
-          alt="skimcards"
-          width="100%"
-          height="100%"
-        />
+          <div className="feature-top">
+            <div className="feature-text">
+              <ul>
+                <li><img src={`${process.env.PUBLIC_URL}/assets/checkmark.png`} alt="checkmark" className="checkmark" />
+                  <strong>
+                    Comprehensive notes organized by class, subject, & chapter.
+                  </strong></li>
+                <li><img src={`${process.env.PUBLIC_URL}/assets/checkmark.png`} alt="checkmark" className="checkmark" />
+                  <strong>
+                    Bite-sized skimcards for fast and effective active recall.
+                  </strong></li>
+                <li><img src={`${process.env.PUBLIC_URL}/assets/checkmark.png`} alt="checkmark" className="checkmark" />
+                  <strong>
+                    Essential formulas highlighted for quick reference and memorization.
+                  </strong></li>
+                <li><img src={`${process.env.PUBLIC_URL}/assets/checkmark.png`} alt="checkmark" className="checkmark" />
+                  <strong>
+                    Interactive Q&A for simple, easy-to-understand explanations.
+                  </strong></li>
+                <li><img src={`${process.env.PUBLIC_URL}/assets/checkmark.png`} alt="checkmark" className="checkmark" />
+                  <strong>
+                    Accessible 24/7, designed for clear structure & formatting.
+                  </strong></li>
+                <li><img src={`${process.env.PUBLIC_URL}/assets/checkmark.png`} alt="checkmark" className="checkmark" />
+                  <strong>
+                    Save hours of preparation with concise, focused materials.
+                  </strong></li>
+              </ul>
             </div>
-            <div className="feature-title">
-              <h2>Skimcards</h2>
-              <p>Master concepts faster with skimcards designed for active recall and effective learning.</p>
+
+            <div className="feature-main-image">
+              <video
+                src={`${process.env.PUBLIC_URL}/assets/Learn.mp4`}
+                width="100%"
+                height="100%"
+                autoPlay
+                loop
+                muted
+                playsInline
+                style={{ objectFit: 'cover' }}
+              />
             </div>
           </div>
-
-  <div className="feature-top">
-        <div className="feature-text">
-          <ul>  
-            <li><img src={`${process.env.PUBLIC_URL}/assets/checkmark.png`} alt="checkmark" className="checkmark"/>
-            <strong>
-              Bite-sized cards, big learning impact.
-            </strong></li>
-              <li><img src={`${process.env.PUBLIC_URL}/assets/checkmark.png`} alt="checkmark" className="checkmark"/>
-            <strong>
-              Easy to learn, easy to remember.
-            </strong></li>
-            <li><img src={`${process.env.PUBLIC_URL}/assets/checkmark.png`} alt="checkmark" className="checkmark"/>
-            <strong>
-              Accessible 24/7, whenever you need them.
-            </strong></li>
-              <li><img src={`${process.env.PUBLIC_URL}/assets/checkmark.png`} alt="checkmark" className="checkmark"/>
-            <strong>
-              Designed for effective learning with clear structure & formatting.
-            </strong></li>
-              <li><img src={`${process.env.PUBLIC_URL}/assets/checkmark.png`} alt="checkmark" className="checkmark"/>
-            <strong>
-              Perfect for power-packed study breaks.
-            </strong></li>
-              <li><img src={`${process.env.PUBLIC_URL}/assets/checkmark.png`} alt="checkmark" className="checkmark"/>
-            <strong>
-              Trusted by students for fast revision before exams.
-            </strong></li>
-          </ul>
         </div>
-
-   <div className="feature-main-image">
-      {!showWebP && (
-        <img
-          src={`${process.env.PUBLIC_URL}/assets/intro.webp`}
-          alt="notes"
-          width="100%"
-          height="100%"
-        />
-      )}
-
-      {showWebP && (
-        <img
-          src={`${process.env.PUBLIC_URL}/assets/intro.webp`}
-          alt="notes"
-          width="100%"
-          height="100%"
-        />
-      )}
-    </div>
-      </div>
-        </div>
-        <br/>
-         <div className="feature-card">
+        <br />
+        <div className="feature-card">
           <div className="feature-header" style={{ backgroundColor: '#FBBCCE' }}>
             <div className="icon-wrapper">
-        <img
-          src={`${process.env.PUBLIC_URL}/assets/qna.png`}
-          alt="questions and answers"
-          width="100%"
-          height="100%"
-        />
+              <img
+                src={`${process.env.PUBLIC_URL}/assets/qna.png`}
+                alt="questions and answers"
+                width="100%"
+                height="100%"
+              />
             </div>
             <div className="feature-title">
               <h2>Ask Questions & Get Answers</h2>
-              <p>Simple language, smart mnemonics, curriculum depth and exam-ready answers — all in one place.</p>
+              <p>Simple language, smart mnemonics, curriculum depth and exam-ready answers - all in one place.</p>
             </div>
           </div>
 
-  <div className="feature-top">
-        <div className="feature-text">
-          <ul>  
-            <li><img src={`${process.env.PUBLIC_URL}/assets/checkmark.png`} alt="checkmark" className="checkmark"/>
-            <strong>
-             Simple, easy-to-understand explanations for every query.
-            </strong></li>
-              <li><img src={`${process.env.PUBLIC_URL}/assets/checkmark.png`} alt="checkmark" className="checkmark"/>
-            <strong>
-              Smart mnemonics & memory tricks to retain key concepts effortlessly.
-            </strong></li>
-            <li><img src={`${process.env.PUBLIC_URL}/assets/checkmark.png`} alt="checkmark" className="checkmark"/>
-            <strong>
-              Accessible 24/7, whenever you need them.
-            </strong></li>
-              <li><img src={`${process.env.PUBLIC_URL}/assets/checkmark.png`} alt="checkmark" className="checkmark"/>
-            <strong>
-              Designed for effective learning with clear structure & formatting.
-            </strong></li>
-              <li><img src={`${process.env.PUBLIC_URL}/assets/checkmark.png`} alt="checkmark" className="checkmark"/>
-            <strong>
-              Relatable everyday examples to make learning intuitive and fun.
-            </strong></li>
-              <li><img src={`${process.env.PUBLIC_URL}/assets/checkmark.png`} alt="checkmark" className="checkmark"/>
-            <strong>
-              Trusted by students for fast revision before exams.
-            </strong></li>
-          </ul>
+          <div className="feature-top">
+            <div className="feature-text">
+              <ul>
+                <li><img src={`${process.env.PUBLIC_URL}/assets/checkmark.png`} alt="checkmark" className="checkmark" />
+                  <strong>
+                    Simple, easy-to-understand explanations for every query.
+                  </strong></li>
+                <li><img src={`${process.env.PUBLIC_URL}/assets/checkmark.png`} alt="checkmark" className="checkmark" />
+                  <strong>
+                    Smart mnemonics & memory tricks to retain key concepts effortlessly.
+                  </strong></li>
+                <li><img src={`${process.env.PUBLIC_URL}/assets/checkmark.png`} alt="checkmark" className="checkmark" />
+                  <strong>
+                    Accessible 24/7, whenever you need them.
+                  </strong></li>
+                <li><img src={`${process.env.PUBLIC_URL}/assets/checkmark.png`} alt="checkmark" className="checkmark" />
+                  <strong>
+                    Designed for effective learning with clear structure & formatting.
+                  </strong></li>
+                <li><img src={`${process.env.PUBLIC_URL}/assets/checkmark.png`} alt="checkmark" className="checkmark" />
+                  <strong>
+                    Relatable everyday examples to make learning intuitive and fun.
+                  </strong></li>
+                <li><img src={`${process.env.PUBLIC_URL}/assets/checkmark.png`} alt="checkmark" className="checkmark" />
+                  <strong>
+                    Trusted by students for fast revision before exams.
+                  </strong></li>
+              </ul>
+            </div>
+
+            <div className="feature-main-image">
+              <video
+                src={`${process.env.PUBLIC_URL}/assets/Ai chat.mp4`}
+                width="100%"
+                height="100%"
+                autoPlay
+                loop
+                muted
+                playsInline
+                style={{ objectFit: 'cover' }}
+              />
+            </div>
+          </div>
         </div>
 
-   <div className="feature-main-image">
-      {!showWebP && (
-        <img
-          src={`${process.env.PUBLIC_URL}/assets/intro.webp`}
-          alt="notes"
-          width="100%"
-          height="100%"
-        />
-      )}
+        <br />
+        <div className="feature-card">
+          <div className="feature-header" style={{ backgroundColor: '#AEECEF' }}>
+            <div className="icon-wrapper">
+              <img
+                src={`${process.env.PUBLIC_URL}/assets/qna.png`}
+                alt="practice"
+                width="100%"
+                height="100%"
+              />
+            </div>
+            <div className="feature-title">
+              <h2>Practice</h2>
+              <p>Test your knowledge with interactive quiz and track your mastery.</p>
+            </div>
+          </div>
 
-      {showWebP && (
-        <img
-          src={`${process.env.PUBLIC_URL}/assets/intro.webp`}
-          alt="notes"
-          width="100%"
-          height="100%"
-        />
-      )}
-    </div>
-      </div>
+          <div className="feature-top">
+            <div className="feature-text">
+              <ul>
+                <li><img src={`${process.env.PUBLIC_URL}/assets/checkmark.png`} alt="checkmark" className="checkmark" />
+                  <strong>
+                    Chapter-wise practice sets tailored to your syllabus.
+                  </strong></li>
+                <li><img src={`${process.env.PUBLIC_URL}/assets/checkmark.png`} alt="checkmark" className="checkmark" />
+                  <strong>
+                    Instant feedback to correct mistakes in real-time.
+                  </strong></li>
+                <li><img src={`${process.env.PUBLIC_URL}/assets/checkmark.png`} alt="checkmark" className="checkmark" />
+                  <strong>
+                    AI-Powered Analysis to identify your weak areas to focus your efforts.
+                  </strong></li>
+                <li><img src={`${process.env.PUBLIC_URL}/assets/checkmark.png`} alt="checkmark" className="checkmark" />
+                  <strong>
+                    Gamified experience to make practicing fun and engaging.
+                  </strong></li>
+                <li><img src={`${process.env.PUBLIC_URL}/assets/checkmark.png`} alt="checkmark" className="checkmark" />
+                  <strong>
+                    Track your progress over time with detailed analytics.
+                  </strong></li>
+                <li><img src={`${process.env.PUBLIC_URL}/assets/checkmark.png`} alt="checkmark" className="checkmark" />
+                  <strong>
+                    Always aligned with your latest curriculum requirements.
+                  </strong></li>
+              </ul>
+            </div>
+
+            <div className="feature-main-image">
+              <video
+                src={`${process.env.PUBLIC_URL}/assets/Practice.mp4`}
+                width="100%"
+                height="100%"
+                autoPlay
+                loop
+                muted
+                playsInline
+                style={{ objectFit: 'cover' }}
+              />
+            </div>
+          </div>
+        </div>
+
+        <br />
+        <div className="feature-card">
+          <div className="feature-header" style={{ backgroundColor: '#E6C2FA' }}>
+            <div className="icon-wrapper">
+              <img
+                src={`${process.env.PUBLIC_URL}/assets/notes.png`}
+                alt="revise"
+                width="100%"
+                height="100%"
+              />
+            </div>
+            <div className="feature-title">
+              <h2>Revise</h2>
+              <p>Consolidate your learning with smart revision before your exams.</p>
+            </div>
+          </div>
+
+          <div className="feature-top">
+            <div className="feature-text">
+              <ul>
+                <li><img src={`${process.env.PUBLIC_URL}/assets/checkmark.png`} alt="checkmark" className="checkmark" />
+                  <strong>
+                    Automated revision schedules based on your personal progress.
+                  </strong></li>
+                <li><img src={`${process.env.PUBLIC_URL}/assets/checkmark.png`} alt="checkmark" className="checkmark" />
+                  <strong>
+                    High-yield topics highlighted for quick and efficient review.
+                  </strong></li>
+                <li><img src={`${process.env.PUBLIC_URL}/assets/checkmark.png`} alt="checkmark" className="checkmark" />
+                  <strong>
+                    Visual summaries and concept maps for better retention.
+                  </strong></li>
+                <li><img src={`${process.env.PUBLIC_URL}/assets/checkmark.png`} alt="checkmark" className="checkmark" />
+                  <strong>
+                    Flashcard integration to actively test your memory.
+                  </strong></li>
+                <li><img src={`${process.env.PUBLIC_URL}/assets/checkmark.png`} alt="checkmark" className="checkmark" />
+                  <strong>
+                    Confidence-building mock tests that simulate exam-ready questions.
+                  </strong></li>
+                <li><img src={`${process.env.PUBLIC_URL}/assets/checkmark.png`} alt="checkmark" className="checkmark" />
+                  <strong>
+                    Everything you need to walk into your exams fully prepared.
+                  </strong></li>
+              </ul>
+            </div>
+
+            <div className="feature-main-image">
+              <video
+                src={`${process.env.PUBLIC_URL}/assets/Revise.mp4`}
+                width="100%"
+                height="100%"
+                autoPlay
+                loop
+                muted
+                playsInline
+                style={{ objectFit: 'cover' }}
+              />
+            </div>
+          </div>
         </div>
       </div>
-    
     </section>
   );
 }
