@@ -132,21 +132,7 @@ const SupervisorAuth = () => {
 
   useEffect(() => {
     async function fetchData() {
-      try {
-        const { data } = await axios.get(GET_MOBILE_SCREEN_URL, { headers: API_HEADERS });
-        
-        if (data && data.status === 200) {
-          setCountryCodes(data.country_code || []);
-          setUiData(data.data || {});
-          if (data.country_code && data.country_code.length > 0) {
-            setSelectedCode(data.country_code[0].code);
-          }
-        } else {
-          setErrorMessage("Failed to load data.");
-        }
-      } catch (error) {
-        console.error("API error (using fallback):", error?.message);
-        // Fallback data in case of CORS or Network Error during local dev
+      const loadFallbackData = () => {
         setCountryCodes([
           { "code": "91", "is_whatsapp": "1", "is_sms": "1" },
           { "code": "971", "is_whatsapp": "1", "is_sms": "0" },
@@ -169,6 +155,24 @@ const SupervisorAuth = () => {
           footer_description: "By proceeding, you agree to Krutsha <a href=\"https://krutsha.app/terms-and-conditions\">Terms & Conditions</a>  and  <a href=\"https://krutsha.app/privacy-policy\">Privacy Policy.</a>"
         });
         setSelectedCode("91");
+      };
+
+      try {
+        const { data } = await axios.get(GET_MOBILE_SCREEN_URL, { headers: API_HEADERS });
+        
+        if (data && data.status === 200) {
+          setCountryCodes(data.country_code || []);
+          setUiData(data.data || {});
+          if (data.country_code && data.country_code.length > 0) {
+            setSelectedCode(data.country_code[0].code);
+          }
+        } else {
+          console.warn("Invalid data from mobile screen API, using fallback");
+          loadFallbackData();
+        }
+      } catch (error) {
+        console.error("API error (using fallback):", error?.message);
+        loadFallbackData();
       }
       
       // Session restore logic
