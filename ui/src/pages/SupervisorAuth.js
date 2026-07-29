@@ -243,17 +243,22 @@ const SupervisorAuth = () => {
     setOtpError("");
 
     try {
-      // 1. Signup API
-      await axios.post(SIGNUP_URL, {
+      const selectedCountryObj = countryCodes.find(c => c.code === selectedCode);
+      const isWhatsapp = selectedCountryObj?.is_whatsapp === "1" ? 1 : 0;
+      const isSms = selectedCountryObj?.is_sms === "1" ? 1 : 0;
+      
+      const payload = {
         phone_number: phoneNumber,
-        country_code: `+${selectedCode}`
-      }, { headers: API_HEADERS });
+        country_code: `+${selectedCode}`,
+        is_whatsapp: isWhatsapp,
+        is_sms: isSms
+      };
+
+      // 1. Signup API
+      await axios.post(SIGNUP_URL, payload, { headers: API_HEADERS });
       
       // 2. Send OTP API
-      const { data } = await axios.post(SEND_OTP_URL, {
-        phone_number: phoneNumber,
-        country_code: `+${selectedCode}`
-      }, { headers: API_HEADERS });
+      const { data } = await axios.post(SEND_OTP_URL, payload, { headers: API_HEADERS });
 
       if (data && data.status === 200) {
         if (data.retry_after) {
