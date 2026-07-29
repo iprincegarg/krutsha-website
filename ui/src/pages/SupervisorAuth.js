@@ -281,7 +281,7 @@ const SupervisorAuth = () => {
       console.error("Error fetching OTP (using fallback):", error);
       
       // Fallback for local development if CORS / Network Error occurs
-      if (error?.message === "Network Error") {
+      if (error?.message === "Network Error" && process.env.NODE_ENV !== 'production') {
         setServerOtp(1134);
         setResendCount(3);
         setAllowOtp(1);
@@ -347,7 +347,7 @@ const SupervisorAuth = () => {
     } catch (error) {
       console.error("Error verifying OTP (using fallback):", error);
       
-      if (error?.message === "Network Error") {
+      if (error?.message === "Network Error" && process.env.NODE_ENV !== 'production') {
         // Fallback logic for local CORS issues
         if (String(otpInput) === "1134") {
           setStep(3);
@@ -355,7 +355,7 @@ const SupervisorAuth = () => {
           setOtpError("Invalid OTP. (Fallback expected 1134)");
         }
       } else {
-        // If the server returned an actual 400 error response
+        // If the server returned an actual 400 error response or blocked by CORS in production
         setOtpError(error?.response?.data?.message || error?.message || "Invalid OTP. Please try again.");
       }
     } finally {
@@ -454,7 +454,7 @@ const SupervisorAuth = () => {
       console.error("Error updating request:", error);
       
       // Local development fallback
-      if (error?.message === "Network Error") {
+      if (error?.message === "Network Error" && process.env.NODE_ENV !== 'production') {
         if (status === 1) {
           // Mock local state update
           setPendingRequests(pendingRequests.filter(p => p.link_id !== req.link_id));
@@ -463,7 +463,7 @@ const SupervisorAuth = () => {
           setPendingRequests(pendingRequests.filter(p => p.link_id !== req.link_id));
         }
       } else {
-        alert(error?.response?.data?.message || "An error occurred.");
+        alert(error?.response?.data?.message || error?.message || "An error occurred.");
       }
     }
   };
