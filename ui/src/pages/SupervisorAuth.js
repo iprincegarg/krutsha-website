@@ -244,8 +244,8 @@ const SupervisorAuth = () => {
 
     try {
       const selectedCountryObj = countryCodes.find(c => c.code === selectedCode);
-      const isWhatsapp = selectedCountryObj?.is_whatsapp === "1" ? 1 : 0;
-      const isSms = selectedCountryObj?.is_sms === "1" ? 1 : 0;
+      const isWhatsapp = selectedCountryObj?.is_whatsapp === "1" ? "1" : "0";
+      const isSms = selectedCountryObj?.is_sms === "1" ? "1" : "0";
       
       const payload = {
         phone_number: phoneNumber,
