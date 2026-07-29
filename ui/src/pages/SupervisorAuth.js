@@ -3,19 +3,22 @@ import { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import axios from 'axios';
 
-const GET_MOBILE_SCREEN_URL = '/get-enter-mobile-screen';
-const SIGNUP_URL = '/api/supervisor/signup';
-const SEND_OTP_URL = '/api/supervisor/send_otp';
-const VERIFY_OTP_URL = '/api/supervisor/verify_otp';
-const PATCH_NAME_URL = '/api/supervisor/patch_supervisor_name';
-const GET_DETAILS_URL = '/api/supervisor/get_supervisor_details';
-const PENDING_REQUESTS_URL = '/api/supervisor/view_pending_requests';
-const UPDATE_REQUEST_URL = '/api/supervisor/update_link_request';
-const GET_USER_DETAILS_URL = '/api/supervisor/get_user_details';
-const GET_USER_LEARNING_DATA_URL = '/api/supervisor/get_user_learning_data';
-const GET_CLASSES_SUBJECTS_URL = '/api/supervisor/get_classes_subjects';
-const GET_CHAPTER_LEARNING_PROGRESS_URL = '/api/supervisor/get_chapter_learning_progress';
-const GET_CHAPTER_QUIZ_PROGRESS_URL = '/webservice/get_chapter_progress';
+const BASE_URL = process.env.NODE_ENV === 'production' ? 'https://krutsha.ireavaschool.in' : '';
+
+const GET_MOBILE_SCREEN_URL = `${BASE_URL}/get-enter-mobile-screen`;
+const SIGNUP_URL = `${BASE_URL}/api/supervisor/signup`;
+const SEND_OTP_URL = `${BASE_URL}/api/supervisor/send_otp`;
+const VERIFY_OTP_URL = `${BASE_URL}/api/supervisor/verify_otp`;
+const PATCH_NAME_URL = `${BASE_URL}/api/supervisor/patch_supervisor_name`;
+const GET_DETAILS_URL = `${BASE_URL}/api/supervisor/get_supervisor_details`;
+const PENDING_REQUESTS_URL = `${BASE_URL}/api/supervisor/view_pending_requests`;
+const UPDATE_REQUEST_URL = `${BASE_URL}/api/supervisor/update_link_request`;
+const GET_USER_DETAILS_URL = `${BASE_URL}/api/supervisor/get_user_details`;
+const GET_USER_LEARNING_DATA_URL = `${BASE_URL}/api/supervisor/get_user_learning_data`;
+const GET_CLASSES_SUBJECTS_URL = `${BASE_URL}/api/supervisor/get_classes_subjects`;
+const GET_CHAPTER_LEARNING_PROGRESS_URL = `${BASE_URL}/api/supervisor/get_chapter_learning_progress`;
+const GET_CHAPTER_QUIZ_PROGRESS_URL = `${BASE_URL}/webservice/get_chapter_progress`;
+const DELETE_LINK_REQUEST_URL = `${BASE_URL}/api/supervisor/delete_link_request`;
 
 const API_HEADERS = {
   'Client-Service': 'education',
@@ -663,7 +666,7 @@ const SupervisorAuth = () => {
           supervisor_number: num
         };
         
-        const res = await axios.post('/api/supervisor/delete_link_request', payload, {
+        const res = await axios.post(DELETE_LINK_REQUEST_URL, payload, {
           headers: API_HEADERS
         });
         
