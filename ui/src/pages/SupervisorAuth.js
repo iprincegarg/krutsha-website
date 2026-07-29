@@ -55,6 +55,7 @@ const SupervisorAuth = () => {
   const [loadingRequests, setLoadingRequests] = useState(false);
   const [activeTab, setActiveTab] = useState("pending");
   const [selectedUser, setSelectedUser] = useState(null);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   // Selected User Inner State
   const [userInnerTab, setUserInnerTab] = useState("overview"); // "overview" | "learning"
@@ -721,12 +722,17 @@ const SupervisorAuth = () => {
       {step === 4 ? (
         <div style={{ display: "flex", flexDirection: "column", minHeight: "100vh", backgroundColor: "#f4f7f6" }}>
           {/* Dashboard Header */}
-          <header style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "15px 30px", backgroundColor: "#fff", borderBottom: "1px solid #e1e5e9", boxShadow: "0 2px 4px rgba(0,0,0,0.05)" }}>
-            <div style={{ display: "flex", alignItems: "center", gap: "20px" }}>
-              <img src={`${process.env.PUBLIC_URL}/assets/Logo.png`} alt="Krutsha Logo" style={{ height: "40px", width: "auto" }} />
-              <h2 style={{ margin: 0, fontSize: "20px", color: "#333" }}>Welcome {supervisorName ? supervisorName : "Supervisor"}!</h2>
+          <header className="dashboard-header">
+            <div className="header-left-container" style={{ display: "flex", flexDirection: "column", gap: "2px" }}>
+              <div className="header-left">
+                <button className="menu-toggle" onClick={() => setIsSidebarOpen(!isSidebarOpen)}>
+                  ☰
+                </button>
+                <img src={`${process.env.PUBLIC_URL}/assets/Logo.png`} alt="Krutsha Logo" style={{ height: "40px", width: "auto" }} />
+              </div>
+              <h2 className="header-welcome-text" style={{ margin: 0, fontSize: "20px", color: "#333" }}>Welcome {supervisorName ? supervisorName : "Supervisor"}!</h2>
             </div>
-            <button 
+            <button
               onClick={() => {
                 setStep(1);
                 setOtpInput("");
@@ -735,15 +741,20 @@ const SupervisorAuth = () => {
                 localStorage.removeItem("supervisor_access_token");
                 localStorage.removeItem("supervisor_number");
               }}
-              style={{ padding: "8px 20px", background: "#333", color: "#fff", border: "none", borderRadius: "5px", cursor: "pointer", fontWeight: "bold" }}
+              title="Log Out"
+              style={{ display: "flex", alignItems: "center", justifyContent: "center", padding: "8px 12px", background: "#333", color: "#fff", border: "none", borderRadius: "5px", cursor: "pointer", transition: "all 0.2s" }}
             >
-              Log Out
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                <polyline points="16 17 21 12 16 7"></polyline>
+                <line x1="21" y1="12" x2="9" y2="12"></line>
+              </svg>
             </button>
           </header>
 
-          <div style={{ display: "flex", flex: 1, overflow: "hidden" }}>
+          <div className="dashboard-layout">
             {/* Sidebar */}
-            <aside style={{ width: "260px", backgroundColor: "#fff", borderRight: "1px solid #e1e5e9", padding: "20px", overflowY: "auto" }}>
+            <aside className={`dashboard-sidebar ${isSidebarOpen ? 'open' : ''}`}>
               <h3 style={{ fontSize: "13px", color: "#888", marginBottom: "15px", textTransform: "uppercase", letterSpacing: "1px", fontWeight: "bold" }}>Menu</h3>
               <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "8px" }}>
                 <li>
@@ -801,7 +812,7 @@ const SupervisorAuth = () => {
             </aside>
 
             {/* Main Content */}
-            <main style={{ flex: 1, padding: "40px", backgroundColor: "#f4f7f6", overflowY: "auto" }}>
+            <main className="dashboard-main" style={{ flex: 1, padding: "40px", backgroundColor: "#f4f7f6", overflowY: "auto" }} onClick={() => setIsSidebarOpen(false)}>
               <div style={{ background: "#fff", borderRadius: "10px", border: "1px solid #e1e5e9", padding: "30px", boxShadow: "0 2px 10px rgba(0,0,0,0.02)" }}>
                 
                 {activeTab === "pending" && (
@@ -843,7 +854,14 @@ const SupervisorAuth = () => {
 
                 {activeTab === "accepted" && (
                   <>
-                    <h3 style={{ fontSize: "20px", marginBottom: "25px", color: "#333" }}>Student Details</h3>
+                    <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "25px" }}>
+                      <h3 style={{ fontSize: "20px", margin: 0, color: "#333" }}>Student Details</h3>
+                      {selectedUser && (
+                        <span style={{ padding: "5px 12px", background: selectedUser.user_status === "1" ? "#d4edda" : "#f8d7da", color: selectedUser.user_status === "1" ? "#155724" : "#721c24", borderRadius: "20px", fontSize: "12px", fontWeight: "bold" }}>
+                          {selectedUser.user_status === "1" ? "Active" : "Inactive"}
+                        </span>
+                      )}
+                    </div>
                     
                     {linkedUsers.length === 0 ? (
                       <p style={{ color: "#777", fontSize: "14px", fontStyle: "italic" }}>No accepted users yet.</p>
@@ -854,15 +872,12 @@ const SupervisorAuth = () => {
                       </div>
                     ) : (
                       <div style={{ animation: "fadeIn 0.3s ease-in-out" }}>
-                        <div style={{ display: "flex", alignItems: "center", gap: "15px", marginBottom: "20px" }}>
+                        <div style={{ marginBottom: "20px" }}>
                           <h3 style={{ fontSize: "26px", margin: "0", color: "#222" }}>{selectedUser.name}</h3>
-                          <span style={{ padding: "5px 12px", background: selectedUser.user_status === "1" ? "#d4edda" : "#f8d7da", color: selectedUser.user_status === "1" ? "#155724" : "#721c24", borderRadius: "20px", fontSize: "12px", fontWeight: "bold" }}>
-                            {selectedUser.user_status === "1" ? "Active" : "Inactive"}
-                          </span>
                         </div>
 
                         {/* Inner Tabs */}
-                        <div style={{ display: "flex", gap: "20px", borderBottom: "2px solid #e1e5e9", marginBottom: "25px" }}>
+                        <div className="dashboard-tabs" style={{ display: "flex", gap: "20px", borderBottom: "2px solid #e1e5e9", marginBottom: "25px" }}>
                           <button 
                             onClick={() => setUserInnerTab("overview")}
                             style={{ padding: "10px 5px", background: "none", border: "none", borderBottom: userInnerTab === "overview" ? "3px solid #4f46e5" : "3px solid transparent", color: userInnerTab === "overview" ? "#4f46e5" : "#666", fontWeight: userInnerTab === "overview" ? "bold" : "normal", fontSize: "15px", cursor: "pointer", marginBottom: "-2px" }}
@@ -891,18 +906,24 @@ const SupervisorAuth = () => {
 
                         {userInnerTab === "overview" && (
                           <div style={{ animation: "fadeIn 0.3s ease-in-out" }}>
-                            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px" }}>
+                            <div className="student-overview-header" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px" }}>
                               <h3 style={{ fontSize: "20px", margin: 0, color: "#333" }}>Student Overview</h3>
                               <button 
                                 onClick={handleDeleteStudent}
-                                style={{ padding: "8px 16px", background: "#fff", border: "1px solid #dc3545", color: "#dc3545", borderRadius: "6px", fontSize: "14px", fontWeight: "bold", cursor: "pointer", transition: "all 0.2s" }}
+                                title="Remove Student"
+                                style={{ display: "flex", alignItems: "center", justifyContent: "center", padding: "8px 12px", background: "#fff", border: "1px solid #dc3545", color: "#dc3545", borderRadius: "6px", cursor: "pointer", transition: "all 0.2s" }}
                                 onMouseOver={(e) => { e.currentTarget.style.background = "#dc3545"; e.currentTarget.style.color = "#fff"; }}
                                 onMouseOut={(e) => { e.currentTarget.style.background = "#fff"; e.currentTarget.style.color = "#dc3545"; }}
                               >
-                                Remove Student
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                  <polyline points="3 6 5 6 21 6"></polyline>
+                                  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                  <line x1="10" y1="11" x2="10" y2="17"></line>
+                                  <line x1="14" y1="11" x2="14" y2="17"></line>
+                                </svg>
                               </button>
                             </div>
-                            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "20px" }}>
+                            <div className="dashboard-cards-grid">
                             {/* Academic Info Card */}
                             <div style={{ padding: "25px", background: "#f8f9fa", borderRadius: "12px", border: "1px solid #e1e5e9", boxShadow: "0 2px 5px rgba(0,0,0,0.02)" }}>
                               <h4 style={{ fontSize: "14px", color: "#667eea", textTransform: "uppercase", letterSpacing: "1px", margin: "0 0 15px 0", borderBottom: "1px solid #e1e5e9", paddingBottom: "10px" }}>Academic Info</h4>
@@ -942,11 +963,12 @@ const SupervisorAuth = () => {
 
                         {userInnerTab === "learning" && (
                           <div style={{ animation: "fadeIn 0.3s ease-in-out" }}>
-                            <div style={{ display: "flex", justifyContent: "flex-end", alignItems: "center", gap: "15px", marginBottom: "20px" }}>
+                            <div className="filters-container" style={{ display: "flex", justifyContent: "flex-end", alignItems: "center", gap: "15px", marginBottom: "20px" }}>
                               <select 
                                 value={dateFilter} 
                                 onChange={handleDateFilterChange}
-                                style={{ padding: "8px 15px", borderRadius: "8px", border: "1px solid #ccc", outline: "none", fontSize: "14px", cursor: "pointer", background: "#fff", color: "#333", width: "130px" }}
+                                className="filter-select"
+                                style={{ padding: "8px 15px", borderRadius: "8px", border: "1px solid #ccc", outline: "none", fontSize: "14px", cursor: "pointer", background: "#fff", color: "#333" }}
                               >
                                 <option value="today">Today</option>
                                 <option value="this week">This Week</option>
@@ -960,7 +982,8 @@ const SupervisorAuth = () => {
                                 placeholder="Search chapter..."
                                 value={learningSearchQuery}
                                 onChange={(e) => setLearningSearchQuery(e.target.value)}
-                                style={{ padding: "8px 15px", borderRadius: "8px", border: "1px solid #ccc", outline: "none", fontSize: "14px", width: "220px" }}
+                                className="filter-input"
+                                style={{ padding: "8px 15px", borderRadius: "8px", border: "1px solid #ccc", outline: "none", fontSize: "14px" }}
                               />
                             </div>
 
@@ -970,7 +993,7 @@ const SupervisorAuth = () => {
                               <p style={{ color: "#777", fontSize: "14px", fontStyle: "italic", textAlign: "center", padding: "40px 0" }}>No learning activity found for the selected period.</p>
                             ) : (
                               <>
-                                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "20px" }}>
+                                <div className="dashboard-cards-grid">
                                   {learningData.filter(item => item.chapter_name.toLowerCase().includes(learningSearchQuery.toLowerCase())).map((item, index) => (
                                     <div key={index} style={{ padding: "20px", background: "#fff", borderRadius: "10px", border: "1px solid #e1e5e9", boxShadow: "0 2px 8px rgba(0,0,0,0.03)" }}>
                                       <div style={{ marginBottom: "15px", borderBottom: "1px solid #eee", paddingBottom: "10px" }}>
@@ -1029,14 +1052,14 @@ const SupervisorAuth = () => {
                             ) : (
                               <div style={{ display: "flex", flexDirection: "column", gap: "15px" }}>
                                 {subjectProgressData.map((classData) => (
-                                  <div key={classData.class_id} style={{ background: "#fff", borderRadius: "10px", border: "1px solid #e1e5e9", overflow: "hidden", boxShadow: "0 2px 5px rgba(0,0,0,0.02)" }}>
+                                  <div key={classData.class_id} style={{ overflow: "hidden", marginBottom: "5px" }}>
                                     <div 
                                       onClick={() => {
                                         setExpandedClassId(expandedClassId === classData.class_id ? null : classData.class_id);
                                         setExpandedSubjectId(null);
                                         setChapterProgressData([]);
                                       }}
-                                      style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "15px 20px", cursor: "pointer", background: expandedClassId === classData.class_id ? "#f8f9fa" : "#fff", transition: "background 0.2s" }}
+                                      style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "15px 20px", cursor: "pointer", background: "transparent", transition: "background 0.2s" }}
                                     >
                                       <div style={{ display: "flex", alignItems: "center", gap: "15px" }}>
                                         <h4 style={{ margin: 0, fontSize: "16px", color: "#333" }}>Class {classData.class_name}</h4>
@@ -1049,13 +1072,14 @@ const SupervisorAuth = () => {
                                     </div>
                                     
                                     {expandedClassId === classData.class_id && (
-                                      <div style={{ padding: "20px", borderTop: "1px solid #e1e5e9", background: "#fafafa" }}>
+                                      <div className="class-subjects-container" style={{ padding: "0", background: "transparent" }}>
                                         <div style={{ display: "flex", flexDirection: "column", gap: "15px" }}>
                                           {classData.subjects.map((subject) => (
-                                            <div key={subject.subject_id} style={{ background: "#fff", border: "1px solid #e1e5e9", borderRadius: "8px", overflow: "hidden" }}>
+                                            <div key={subject.subject_id} style={{ overflow: "hidden", borderBottom: "1px solid #f1f1f1" }}>
                                               <div 
                                                 onClick={() => handleSubjectClick(classData.class_id, subject.subject_id)}
-                                                style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "15px", cursor: "pointer", background: expandedSubjectId === subject.subject_id ? "#f8f9fa" : "#fff" }}
+                                                className="subject-row"
+                                                style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "10px", cursor: "pointer", background: "transparent" }}
                                               >
                                                 <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
                                                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#888" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ transform: expandedSubjectId === subject.subject_id ? "rotate(90deg)" : "rotate(0deg)", transition: "transform 0.2s" }}>
@@ -1081,7 +1105,7 @@ const SupervisorAuth = () => {
                                                   ) : chapterProgressData.length === 0 ? (
                                                     <p style={{ color: "#777", fontSize: "13px", fontStyle: "italic", textAlign: "center" }}>No chapters found for this subject.</p>
                                                   ) : (
-                                                    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "20px" }}>
+                                                    <div className="dashboard-cards-grid">
                                                       {chapterProgressData.map((chapter) => (
                                                         <div key={chapter.chapter_id} style={{ padding: "15px", background: "#fff", borderRadius: "8px", border: "1px solid #e1e5e9", boxShadow: "0 1px 3px rgba(0,0,0,0.02)" }}>
                                                           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "15px", borderBottom: "1px solid #eee", paddingBottom: "10px" }}>
@@ -1132,14 +1156,15 @@ const SupervisorAuth = () => {
 
                         {userInnerTab === "quiz" && (
                           <div style={{ animation: "fadeIn 0.3s ease-in-out" }}>
-                            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "25px" }}>
+                            <div className="filters-container" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "25px" }}>
                               <h3 style={{ fontSize: "20px", margin: 0, color: "#333" }}>Chapter Quiz Progress</h3>
                               <input 
                                 type="text"
                                 placeholder="Search chapter..."
                                 value={quizSearchQuery}
                                 onChange={(e) => setQuizSearchQuery(e.target.value)}
-                                style={{ padding: "8px 15px", borderRadius: "8px", border: "1px solid #ccc", outline: "none", fontSize: "14px", width: "220px" }}
+                                className="filter-input"
+                                style={{ padding: "8px 15px", borderRadius: "8px", border: "1px solid #ccc", outline: "none", fontSize: "14px" }}
                               />
                             </div>
 
@@ -1149,7 +1174,7 @@ const SupervisorAuth = () => {
                               <p style={{ color: "#777", fontSize: "14px", fontStyle: "italic", textAlign: "center", padding: "40px 0" }}>No quiz activity found for this student.</p>
                             ) : (
                               <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
-                                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))", gap: "20px" }}>
+                                <div className="dashboard-cards-grid">
                                   {quizData.filter(quiz => quiz.chapter.toLowerCase().includes(quizSearchQuery.toLowerCase())).map((quiz, idx) => {
                                     // Parse trend for sparkline
                                     let trend = [];

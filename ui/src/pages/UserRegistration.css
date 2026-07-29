@@ -271,3 +271,201 @@ select:valid:not([value=""]):focus {
         width: 100%;
     }
 }
+
+/* Dashboard Responsiveness */
+.dashboard-layout {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+  position: relative;
+}
+
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 30px;
+  background-color: #fff;
+  border-bottom: 1px solid #e1e5e9;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.menu-toggle {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: #333;
+  padding: 0;
+  margin-right: 10px;
+}
+
+.dashboard-sidebar {
+  width: 260px;
+  background-color: #fff;
+  border-right: 1px solid #e1e5e9;
+  padding: 20px;
+  overflow-y: auto;
+  transition: transform 0.3s ease;
+}
+
+@media (max-width: 768px) {
+  .dashboard-header {
+    padding: 10px 15px;
+  }
+  
+  .header-left {
+    gap: 10px;
+  }
+  
+  .header-welcome-text {
+    font-size: 16px !important;
+  }
+
+  .header-left img {
+    height: 30px !important;
+  }
+  
+  .dashboard-header button:not(.menu-toggle) {
+    padding: 6px 12px !important;
+    font-size: 13px !important;
+  }
+
+  .menu-toggle {
+    display: block;
+  }
+
+  .dashboard-sidebar {
+    position: absolute;
+    z-index: 1000;
+    height: 100%;
+    transform: translateX(-100%);
+  }
+
+  .dashboard-sidebar.open {
+    transform: translateX(0);
+    box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+  }
+  
+  .dashboard-main {
+    padding: 5px !important;
+  }
+
+  .dashboard-tabs {
+    flex-direction: column;
+    gap: 10px !important;
+  }
+
+  .dashboard-tabs button {
+    text-align: left;
+    padding: 8px !important;
+    font-size: 14px !important;
+  }
+  
+  .dashboard-main h3 {
+    font-size: 18px !important;
+    margin-bottom: 15px !important;
+  }
+  
+  .dashboard-main h4 {
+    font-size: 15px !important;
+  }
+  
+  .dashboard-main h5 {
+    font-size: 14px !important;
+  }
+  
+  .dashboard-main strong {
+    font-size: 13px !important;
+  }
+  
+  .dashboard-main span {
+    font-size: 12px !important;
+  }
+  
+  .dashboard-main p {
+    font-size: 12px !important;
+  }
+  
+  .dashboard-main select, .dashboard-main input {
+    font-size: 12px !important;
+    padding: 6px 10px !important;
+  }
+}
+
+.dashboard-cards-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+@media (max-width: 768px) {
+  .dashboard-cards-grid {
+    grid-template-columns: 1fr;
+    gap: 10px !important;
+  }
+  
+  /* Score number scaling */
+  div[style*="font-size: 28px"] {
+    font-size: 22px !important;
+  }
+  
+  /* Reduce padding and margin on cards for app feel */
+  .dashboard-main > div > div > div > div {
+    padding: 5px !important;
+    margin: 0 !important;
+  }
+  
+  .dashboard-main > div > div > div > div > div {
+     padding: 5px !important;
+     margin: 0 !important;
+  }
+  
+  /* Student Overview header elements */
+  .student-overview-header h3 {
+    font-size: 14px !important;
+  }
+  
+  .student-overview-header button {
+    font-size: 11px !important;
+    padding: 6px 12px !important;
+  }
+  
+  /* Responsive Filters */
+  .filters-container {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 10px !important;
+  }
+  
+  .filter-select, .filter-input {
+    width: 100% !important;
+  }
+  
+  /* Subject Wise Progress Fixes */
+  .class-subjects-container {
+    padding: 0 !important;
+  }
+  
+  .subject-row {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 5px !important;
+    padding: 5px !important;
+  }
+}
+
+.filter-select {
+  width: 130px;
+}
+
+.filter-input {
+  width: 220px;
+}
