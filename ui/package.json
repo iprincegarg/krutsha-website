@@ -3,6 +3,7 @@
     "name": "ui",
     "version": "0.1.0",
     "private": true,
+    "proxy": "https://krutsha.ireavaschool.in",
     "dependencies": {
         "@testing-library/jest-dom": "^6.6.3",
         "@testing-library/react": "^16.3.0",

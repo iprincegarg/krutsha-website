@@ -15,6 +15,7 @@ import TermsAndConditions  from "./pages/TermsAndConditions";
 import AnswerPreview from './pages/AnswerPreview.js';
 import Notes from './pages/notes/index.jsx';
 import Skimcards from './pages/skimcards/index.jsx';
+import SupervisorAuth from './pages/SupervisorAuth';
 
 function App() {
   return (
@@ -38,6 +39,7 @@ function App() {
 
         {/* Separate Full Page Routes */}
         <Route path='/user-registration' element={<UserRegistration />} />
+        <Route path='/supervisor-auth' element={<SupervisorAuth />} />
         <Route path="/privacy-policy" element={<><Navbar /><Header /><PrivacyPolicy /><ContactSection /></>} />
         <Route path="/terms-and-conditions" element={<><Navbar /><Header /><TermsAndConditions /><ContactSection /></>} />
         <Route path="/refund-policy" element={<><Navbar /><Header /><RefundPolicy /><ContactSection /></>} />
