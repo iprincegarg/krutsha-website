@@ -347,6 +347,7 @@ const SupervisorAuth = () => {
           const detailsRes = await axios.get(`${GET_DETAILS_URL}?supervisor_number=${phoneNumber}`, {
             headers: {
               ...API_HEADERS,
+              'Supervisor-Number': phoneNumber,
               'New-Key': data.access_token
             }
           });
