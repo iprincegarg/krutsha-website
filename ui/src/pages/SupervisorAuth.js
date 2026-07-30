@@ -18,6 +18,9 @@ const GET_USER_LEARNING_DATA_URL = `${BASE_URL}/api/supervisor/get_user_learning
 const GET_CLASSES_SUBJECTS_URL = `${BASE_URL}/api/supervisor/get_classes_subjects`;
 const GET_CHAPTER_LEARNING_PROGRESS_URL = `${BASE_URL}/api/supervisor/get_chapter_learning_progress`;
 const GET_CHAPTER_QUIZ_PROGRESS_URL = `${BASE_URL}/webservice/get_chapter_progress`;
+const GET_EXAM_RESULT_URL = `${BASE_URL}/user_exam_result`;
+const GET_EXAM_ANALYSIS_URL = `${BASE_URL}/user-exam-analyser`;
+const GET_TODAY_OVERVIEW_URL = `${BASE_URL}/api/supervisor/today_overview`;
 const DELETE_LINK_REQUEST_URL = `${BASE_URL}/api/supervisor/delete_link_request`;
 
 const API_HEADERS = {
@@ -31,7 +34,7 @@ const SupervisorAuth = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [countryCodes, setCountryCodes] = useState([]);
   const [uiData, setUiData] = useState(null);
-  
+
   const [selectedCode, setSelectedCode] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
 
@@ -48,7 +51,7 @@ const SupervisorAuth = () => {
 
   // Name Entry State
   const [supervisorName, setSupervisorName] = useState("");
-  
+
   // Dashboard State
   const [pendingRequests, setPendingRequests] = useState([]);
   const [linkedUsers, setLinkedUsers] = useState([]);
@@ -58,8 +61,12 @@ const SupervisorAuth = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   // Selected User Inner State
-  const [userInnerTab, setUserInnerTab] = useState("overview"); // "overview" | "learning"
-  
+  const [userInnerTab, setUserInnerTab] = useState("overview"); // "overview" | "today_overview" | "learning" | "subject_progress" | "quiz"
+
+  // Today's Overview State
+  const [todayOverviewData, setTodayOverviewData] = useState(null);
+  const [loadingTodayOverview, setLoadingTodayOverview] = useState(false);
+
   // Learning Progress State
   const [learningData, setLearningData] = useState([]);
   const [learningOffset, setLearningOffset] = useState(0);
@@ -71,7 +78,7 @@ const SupervisorAuth = () => {
   const [subjectProgressData, setSubjectProgressData] = useState([]);
   const [loadingSubjectProgress, setLoadingSubjectProgress] = useState(false);
   const [expandedClassId, setExpandedClassId] = useState(null);
-  
+
   // Chapter Learning Progress State
   const [expandedSubjectId, setExpandedSubjectId] = useState(null);
   const [chapterProgressData, setChapterProgressData] = useState([]);
@@ -82,6 +89,16 @@ const SupervisorAuth = () => {
   const [quizOffset, setQuizOffset] = useState(0);
   const [hasMoreQuiz, setHasMoreQuiz] = useState(true);
   const [loadingQuiz, setLoadingQuiz] = useState(false);
+
+  // Exam Result Modal State
+  const [selectedExamResult, setSelectedExamResult] = useState(null);
+  const [isExamModalOpen, setIsExamModalOpen] = useState(false);
+  const [loadingExamResult, setLoadingExamResult] = useState(false);
+
+  // AI Analysis Modal State
+  const [selectedAnalysisResult, setSelectedAnalysisResult] = useState(null);
+  const [isAnalysisModalOpen, setIsAnalysisModalOpen] = useState(false);
+  const [loadingAnalysis, setLoadingAnalysis] = useState(false);
 
   // Search States
   const [learningSearchQuery, setLearningSearchQuery] = useState("");
@@ -110,7 +127,7 @@ const SupervisorAuth = () => {
         break;
       case "last week":
         const lwDayOfWeek = today.getDay();
-        const lwStart = today.getDate() - lwDayOfWeek - 6; 
+        const lwStart = today.getDate() - lwDayOfWeek - 6;
         fromDate = new Date(today.setDate(lwStart));
         toDate = new Date(fromDate);
         toDate.setDate(toDate.getDate() + 6);
@@ -163,7 +180,7 @@ const SupervisorAuth = () => {
 
       try {
         const { data } = await axios.get(GET_MOBILE_SCREEN_URL, { headers: API_HEADERS });
-        
+
         if (data && data.status === 200) {
           setCountryCodes(data.country_code || []);
           setUiData(data.data || {});
@@ -178,21 +195,22 @@ const SupervisorAuth = () => {
         console.error("API error (using fallback):", error?.message);
         loadFallbackData();
       }
-      
+
       // Session restore logic
       const storedToken = localStorage.getItem("supervisor_access_token");
       const storedNumber = localStorage.getItem("supervisor_number");
-      
+
       if (storedToken && storedNumber) {
         setPhoneNumber(storedNumber);
         try {
-          const detailsRes = await axios.get(`${GET_DETAILS_URL}?supervisor_number=${storedNumber}`, { 
+          const detailsRes = await axios.get(`${GET_DETAILS_URL}?supervisor_number=${storedNumber}`, {
             headers: {
               ...API_HEADERS,
+              'Supervisor-Number': storedNumber,
               'New-Key': storedToken
             }
           });
-          
+
           if (detailsRes.data && detailsRes.data.status === 200) {
             if (detailsRes.data.supervisor_name) {
               setSupervisorName(detailsRes.data.supervisor_name);
@@ -247,7 +265,7 @@ const SupervisorAuth = () => {
       const selectedCountryObj = countryCodes.find(c => c.code === selectedCode);
       const isWhatsapp = selectedCountryObj?.is_whatsapp === "1" ? "1" : "0";
       const isSms = selectedCountryObj?.is_sms === "1" ? "1" : "0";
-      
+
       const payload = {
         phone_number: phoneNumber,
         country_code: `+${selectedCode}`,
@@ -257,7 +275,7 @@ const SupervisorAuth = () => {
 
       // 1. Signup API
       await axios.post(SIGNUP_URL, payload, { headers: API_HEADERS });
-      
+
       // 2. Send OTP API
       const { data } = await axios.post(SEND_OTP_URL, payload, { headers: API_HEADERS });
 
@@ -280,7 +298,7 @@ const SupervisorAuth = () => {
       }
     } catch (error) {
       console.error("Error fetching OTP (using fallback):", error);
-      
+
       // Fallback for local development if CORS / Network Error occurs
       if (error?.message === "Network Error" && process.env.NODE_ENV !== 'production') {
         setServerOtp(1134);
@@ -301,21 +319,21 @@ const SupervisorAuth = () => {
   const handleVerifyOtp = async (e) => {
     e.preventDefault();
     setOtpError("");
-    
+
     if (!otpInput) {
       setOtpError("Please enter OTP.");
       return;
     }
-    
+
     setSubmitting(true);
-    
+
     try {
       const { data } = await axios.post(VERIFY_OTP_URL, {
         phone_number: phoneNumber,
         country_code: `+${selectedCode}`,
         otp: otpInput
       }, { headers: API_HEADERS });
-      
+
       // Some APIs return 200 HTTP status but 400 in the body
       if (data && data.status === 200) {
         // Storing token securely in localStorage, not showing it to the user
@@ -323,10 +341,10 @@ const SupervisorAuth = () => {
           localStorage.setItem("supervisor_access_token", data.access_token);
           localStorage.setItem("supervisor_number", phoneNumber);
         }
-        
+
         // Fetch supervisor details to check if name exists
         try {
-          const detailsRes = await axios.get(`${GET_DETAILS_URL}?supervisor_number=${phoneNumber}`, { 
+          const detailsRes = await axios.get(`${GET_DETAILS_URL}?supervisor_number=${phoneNumber}`, {
             headers: {
               ...API_HEADERS,
               'New-Key': data.access_token
@@ -347,7 +365,7 @@ const SupervisorAuth = () => {
       }
     } catch (error) {
       console.error("Error verifying OTP (using fallback):", error);
-      
+
       if (error?.message === "Network Error" && process.env.NODE_ENV !== 'production') {
         // Fallback logic for local CORS issues
         if (String(otpInput) === "1134") {
@@ -370,10 +388,10 @@ const SupervisorAuth = () => {
       setErrorMessage("Please enter your name.");
       return;
     }
-    
+
     setSubmitting(true);
     setErrorMessage("");
-    
+
     try {
       const token = localStorage.getItem("supervisor_access_token");
       await axios.patch(PATCH_NAME_URL, {
@@ -385,7 +403,7 @@ const SupervisorAuth = () => {
           'New-Key': token
         }
       });
-      
+
       setStep(4); // Proceed to Dashboard
     } catch (error) {
       console.error("Error patching name:", error);
@@ -407,7 +425,7 @@ const SupervisorAuth = () => {
       const token = localStorage.getItem("supervisor_access_token");
       const num = localStorage.getItem("supervisor_number") || phoneNumber;
       const headers = { ...API_HEADERS, 'Supervisor-Number': num, 'New-Key': token };
-      
+
       const [pendingRes, linkedRes] = await Promise.all([
         axios.get(PENDING_REQUESTS_URL, { headers }).catch(e => e),
         axios.get(GET_USER_DETAILS_URL, { headers }).catch(e => e)
@@ -445,7 +463,7 @@ const SupervisorAuth = () => {
           'New-Key': token // Passing just in case it requires auth like the other endpoints
         }
       });
-      
+
       if (res.data && res.data.status === 200) {
         await fetchDashboardData(); // Re-fetch to update lists
       } else {
@@ -453,7 +471,7 @@ const SupervisorAuth = () => {
       }
     } catch (error) {
       console.error("Error updating request:", error);
-      
+
       // Local development fallback
       if (error?.message === "Network Error" && process.env.NODE_ENV !== 'production') {
         if (status === 1) {
@@ -479,16 +497,16 @@ const SupervisorAuth = () => {
 
   const fetchLearningProgress = async (reset = false, userToFetch = selectedUser, filterToUse = dateFilter) => {
     if (!userToFetch) return;
-    
+
     setLoadingLearning(true);
     const newOffset = reset ? 0 : learningOffset;
     const { from, to } = getDateRange(filterToUse);
     const limit = 10;
-    
+
     try {
       const token = localStorage.getItem("supervisor_access_token");
       const num = localStorage.getItem("supervisor_number") || phoneNumber;
-      
+
       const res = await axios.get(GET_USER_LEARNING_DATA_URL, {
         headers: {
           ...API_HEADERS,
@@ -527,12 +545,12 @@ const SupervisorAuth = () => {
 
   const fetchSubjectProgress = async (userToFetch = selectedUser) => {
     if (!userToFetch) return;
-    
+
     setLoadingSubjectProgress(true);
     try {
       const token = localStorage.getItem("supervisor_access_token");
       const num = localStorage.getItem("supervisor_number") || phoneNumber;
-      
+
       const res = await axios.get(GET_CLASSES_SUBJECTS_URL, {
         headers: {
           ...API_HEADERS,
@@ -557,15 +575,48 @@ const SupervisorAuth = () => {
     }
   };
 
+  const fetchTodayOverview = async (userToFetch = selectedUser) => {
+    if (!userToFetch) return;
+
+    setLoadingTodayOverview(true);
+    try {
+      const token = localStorage.getItem("supervisor_access_token");
+      const num = localStorage.getItem("supervisor_number") || phoneNumber;
+
+      const res = await axios.get(GET_TODAY_OVERVIEW_URL, {
+        headers: {
+          'Client-Service': 'education',
+          'Auth-Key': 'krutsha@@',
+          'Supervisor-Number': num,
+          'New-Key': token
+        },
+        params: {
+          userID: userToFetch.user_id
+        }
+      });
+
+      if (res.data && res.data.status === 200 && res.data.data) {
+        setTodayOverviewData(res.data.data);
+      } else {
+        setTodayOverviewData(null);
+      }
+    } catch (error) {
+      console.error("Error fetching today's overview:", error);
+      setTodayOverviewData(null);
+    } finally {
+      setLoadingTodayOverview(false);
+    }
+  };
+
   const fetchChapterProgress = async (classId, subjectId) => {
     if (!selectedUser) return;
-    
+
     setLoadingChapterProgress(true);
     setChapterProgressData([]);
     try {
       const token = localStorage.getItem("supervisor_access_token");
       const num = localStorage.getItem("supervisor_number") || phoneNumber;
-      
+
       const res = await axios.get(GET_CHAPTER_LEARNING_PROGRESS_URL, {
         headers: {
           ...API_HEADERS,
@@ -591,14 +642,14 @@ const SupervisorAuth = () => {
 
   const fetchQuizProgress = async (reset = false, userToFetch = selectedUser) => {
     if (!userToFetch) return;
-    
+
     setLoadingQuiz(true);
     const newOffset = reset ? 0 : quizOffset;
     const limit = 10;
-    
+
     try {
       const num = localStorage.getItem("supervisor_number") || phoneNumber;
-      
+
       const res = await axios.get(GET_CHAPTER_QUIZ_PROGRESS_URL, {
         headers: {
           'Client-Service': 'education',
@@ -633,6 +684,70 @@ const SupervisorAuth = () => {
     }
   };
 
+  const handleExamClick = async (examId) => {
+    if (!examId) return;
+    setIsExamModalOpen(true);
+    setLoadingExamResult(true);
+    setSelectedExamResult(null);
+
+    try {
+      const res = await axios.get(GET_EXAM_RESULT_URL, {
+        headers: {
+          'Client-Service': 'education',
+          'Auth-Key': 'krutsha@@',
+          'User-ID': selectedUser.user_id
+        },
+        params: {
+          exam_id: examId
+        }
+      });
+      if (res.data && res.data.status === 200 && res.data.data) {
+        setSelectedExamResult(res.data.data);
+      } else {
+        alert(res.data.message || "Failed to load exam result");
+        setIsExamModalOpen(false);
+      }
+    } catch (error) {
+      console.error("Error fetching exam result:", error);
+      alert("An error occurred while fetching exam results.");
+      setIsExamModalOpen(false);
+    } finally {
+      setLoadingExamResult(false);
+    }
+  };
+
+  const handleAnalysisClick = async (examId) => {
+    if (!examId) return;
+    setIsAnalysisModalOpen(true);
+    setLoadingAnalysis(true);
+    setSelectedAnalysisResult(null);
+
+    try {
+      const res = await axios.get(GET_EXAM_ANALYSIS_URL, {
+        headers: {
+          'Client-Service': 'education',
+          'Auth-Key': 'krutsha@@',
+          'User-ID': selectedUser.user_id
+        },
+        params: {
+          exam_id: examId
+        }
+      });
+      if (res.data && res.data.status === 200 && res.data.data) {
+        setSelectedAnalysisResult(res.data.data);
+      } else {
+        alert(res.data.message || "Failed to load exam analysis");
+        setIsAnalysisModalOpen(false);
+      }
+    } catch (error) {
+      console.error("Error fetching exam analysis:", error);
+      alert("An error occurred while fetching exam analysis.");
+      setIsAnalysisModalOpen(false);
+    } finally {
+      setLoadingAnalysis(false);
+    }
+  };
+
   const handleSubjectClick = (classId, subjectId) => {
     if (expandedSubjectId === subjectId) {
       setExpandedSubjectId(null);
@@ -650,7 +765,8 @@ const SupervisorAuth = () => {
     setExpandedSubjectId(null);
     setLearningSearchQuery("");
     setQuizSearchQuery("");
-    
+
+    fetchTodayOverview(user);
     fetchLearningProgress(true, user, "this week");
     fetchSubjectProgress(user);
     fetchQuizProgress(true, user);
@@ -663,7 +779,7 @@ const SupervisorAuth = () => {
 
   const handleDeleteStudent = async () => {
     if (!selectedUser) return;
-    
+
     if (window.confirm(`Are you sure you want to remove ${selectedUser.name} from your list? This action cannot be undone.`)) {
       try {
         const num = localStorage.getItem("supervisor_number") || phoneNumber;
@@ -671,11 +787,11 @@ const SupervisorAuth = () => {
           user_id: selectedUser.user_id,
           supervisor_number: num
         };
-        
+
         const res = await axios.post(DELETE_LINK_REQUEST_URL, payload, {
           headers: API_HEADERS
         });
-        
+
         if (res.data && res.data.status === 200) {
           fetchDashboardData();
           setSelectedUser(null);
@@ -713,9 +829,9 @@ const SupervisorAuth = () => {
         <meta name="robots" content="noindex, nofollow" />
         <title>
           {step === 1 ? (uiData?.header_title || "Supervisor Auth") :
-           step === 2 ? "Enter OTP" :
-           step === 3 ? "Your Profile" :
-           "Dashboard"}
+            step === 2 ? "Enter OTP" :
+              step === 3 ? "Your Profile" :
+                "Dashboard"}
         </title>
       </Helmet>
 
@@ -758,7 +874,7 @@ const SupervisorAuth = () => {
               <h3 style={{ fontSize: "13px", color: "#888", marginBottom: "15px", textTransform: "uppercase", letterSpacing: "1px", fontWeight: "bold" }}>Menu</h3>
               <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "8px" }}>
                 <li>
-                  <button 
+                  <button
                     onClick={() => { setActiveTab("pending"); setSelectedUser(null); }}
                     style={{ width: "100%", textAlign: "left", padding: "12px 15px", background: activeTab === "pending" ? "#eef2ff" : "transparent", border: "none", borderRadius: "8px", cursor: "pointer", color: activeTab === "pending" ? "#4f46e5" : "#555", fontWeight: activeTab === "pending" ? "bold" : "normal", fontSize: "15px", display: "flex", justifyContent: "space-between", alignItems: "center" }}
                   >
@@ -771,7 +887,7 @@ const SupervisorAuth = () => {
                   </button>
                 </li>
                 <li>
-                  <button 
+                  <button
                     onClick={() => { setActiveTab("accepted"); setSelectedUser(null); }}
                     style={{ width: "100%", textAlign: "left", padding: "12px 15px", background: activeTab === "accepted" ? "#eef2ff" : "transparent", border: "none", borderRadius: "8px", cursor: "pointer", color: activeTab === "accepted" ? "#4f46e5" : "#555", fontWeight: activeTab === "accepted" ? "bold" : "normal", fontSize: "15px", display: "flex", justifyContent: "space-between", alignItems: "center" }}
                   >
@@ -791,13 +907,13 @@ const SupervisorAuth = () => {
                   <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "5px" }}>
                     {linkedUsers.map(user => (
                       <li key={user.user_id}>
-                        <button 
+                        <button
                           onClick={() => handleSelectUser(user)}
-                          style={{ 
-                            width: "100%", textAlign: "left", padding: "10px 15px", 
-                            background: selectedUser?.user_id === user.user_id ? "#f4f7f6" : "transparent", 
-                            border: "none", borderRadius: "8px", cursor: "pointer", 
-                            color: selectedUser?.user_id === user.user_id ? "#333" : "#666", 
+                          style={{
+                            width: "100%", textAlign: "left", padding: "10px 15px",
+                            background: selectedUser?.user_id === user.user_id ? "#f4f7f6" : "transparent",
+                            border: "none", borderRadius: "8px", cursor: "pointer",
+                            color: selectedUser?.user_id === user.user_id ? "#333" : "#666",
                             fontSize: "14px", fontWeight: selectedUser?.user_id === user.user_id ? "bold" : "500",
                             borderLeft: selectedUser?.user_id === user.user_id ? "4px solid #4f46e5" : "4px solid transparent"
                           }}
@@ -814,11 +930,11 @@ const SupervisorAuth = () => {
             {/* Main Content */}
             <main className="dashboard-main" style={{ flex: 1, padding: "40px", backgroundColor: "#f4f7f6", overflowY: "auto" }} onClick={() => setIsSidebarOpen(false)}>
               <div style={{ background: "#fff", borderRadius: "10px", border: "1px solid #e1e5e9", padding: "30px", boxShadow: "0 2px 10px rgba(0,0,0,0.02)" }}>
-                
+
                 {activeTab === "pending" && (
                   <>
                     <h3 style={{ fontSize: "20px", marginBottom: "25px", color: "#333" }}>Pending Student Requests</h3>
-                    
+
                     {loadingRequests ? (
                       <p style={{ color: "#777", fontSize: "14px" }}>Loading requests...</p>
                     ) : pendingRequests.length === 0 ? (
@@ -832,13 +948,13 @@ const SupervisorAuth = () => {
                               <p style={{ margin: "0", color: "#666", fontSize: "14px" }}>Phone: {req.user_phone}</p>
                             </div>
                             <div style={{ display: "flex", gap: "10px" }}>
-                              <button 
+                              <button
                                 onClick={() => handleAcceptRequest(req)}
                                 style={{ padding: "8px 20px", background: "#28a745", color: "#fff", border: "none", borderRadius: "5px", cursor: "pointer", fontWeight: "bold", fontSize: "13px" }}
                               >
                                 Accept
                               </button>
-                              <button 
+                              <button
                                 onClick={() => handleRejectRequest(req)}
                                 style={{ padding: "8px 20px", background: "#dc3545", color: "#fff", border: "none", borderRadius: "5px", cursor: "pointer", fontWeight: "bold", fontSize: "13px" }}
                               >
@@ -862,7 +978,7 @@ const SupervisorAuth = () => {
                         </span>
                       )}
                     </div>
-                    
+
                     {linkedUsers.length === 0 ? (
                       <p style={{ color: "#777", fontSize: "14px", fontStyle: "italic" }}>No accepted users yet.</p>
                     ) : !selectedUser ? (
@@ -877,26 +993,32 @@ const SupervisorAuth = () => {
                         </div>
 
                         {/* Inner Tabs */}
-                        <div className="dashboard-tabs" style={{ display: "flex", gap: "20px", borderBottom: "2px solid #e1e5e9", marginBottom: "25px" }}>
-                          <button 
+                        <div className="dashboard-tabs" style={{ display: "flex", gap: "20px", borderBottom: "2px solid #e1e5e9", marginBottom: "25px", overflowX: "auto", overflowY: "hidden", whiteSpace: "nowrap" }}>
+                          <button
                             onClick={() => setUserInnerTab("overview")}
                             style={{ padding: "10px 5px", background: "none", border: "none", borderBottom: userInnerTab === "overview" ? "3px solid #4f46e5" : "3px solid transparent", color: userInnerTab === "overview" ? "#4f46e5" : "#666", fontWeight: userInnerTab === "overview" ? "bold" : "normal", fontSize: "15px", cursor: "pointer", marginBottom: "-2px" }}
                           >
-                            Overview
+                            Profile
                           </button>
-                          <button 
+                          <button
+                            onClick={() => setUserInnerTab("today_overview")}
+                            style={{ padding: "10px 5px", background: "none", border: "none", borderBottom: userInnerTab === "today_overview" ? "3px solid #4f46e5" : "3px solid transparent", color: userInnerTab === "today_overview" ? "#4f46e5" : "#666", fontWeight: userInnerTab === "today_overview" ? "bold" : "normal", fontSize: "15px", cursor: "pointer", marginBottom: "-2px" }}
+                          >
+                            Today's Learning
+                          </button>
+                          <button
                             onClick={() => setUserInnerTab("learning")}
                             style={{ padding: "10px 5px", background: "none", border: "none", borderBottom: userInnerTab === "learning" ? "3px solid #4f46e5" : "3px solid transparent", color: userInnerTab === "learning" ? "#4f46e5" : "#666", fontWeight: userInnerTab === "learning" ? "bold" : "normal", fontSize: "15px", cursor: "pointer", marginBottom: "-2px" }}
                           >
                             Learning Progress
                           </button>
-                          <button 
+                          <button
                             onClick={() => setUserInnerTab("subject_progress")}
                             style={{ padding: "10px 5px", background: "none", border: "none", borderBottom: userInnerTab === "subject_progress" ? "3px solid #4f46e5" : "3px solid transparent", color: userInnerTab === "subject_progress" ? "#4f46e5" : "#666", fontWeight: userInnerTab === "subject_progress" ? "bold" : "normal", fontSize: "15px", cursor: "pointer", marginBottom: "-2px" }}
                           >
                             Subject Wise Progress
                           </button>
-                          <button 
+                          <button
                             onClick={() => setUserInnerTab("quiz")}
                             style={{ padding: "10px 5px", background: "none", border: "none", borderBottom: userInnerTab === "quiz" ? "3px solid #4f46e5" : "3px solid transparent", color: userInnerTab === "quiz" ? "#4f46e5" : "#666", fontWeight: userInnerTab === "quiz" ? "bold" : "normal", fontSize: "15px", cursor: "pointer", marginBottom: "-2px" }}
                           >
@@ -904,11 +1026,89 @@ const SupervisorAuth = () => {
                           </button>
                         </div>
 
+                        {userInnerTab === "today_overview" && (
+                          <div style={{ animation: "fadeIn 0.3s ease-in-out" }}>
+                            {loadingTodayOverview ? (
+                              <p style={{ color: "#777", fontSize: "14px", textAlign: "center", padding: "40px 0" }}>Loading today's overview...</p>
+                            ) : !todayOverviewData || (todayOverviewData.learning_overview?.length === 0 && todayOverviewData.practice_overview?.length === 0) ? (
+                              <div style={{ textAlign: "center", padding: "40px 0" }}>
+                                <p style={{ color: "#777", fontSize: "15px", fontStyle: "italic", marginBottom: "5px" }}>No activity recorded for today yet.</p>
+                                <p style={{ color: "#999", fontSize: "13px" }}>Check back later to see the student's progress.</p>
+                              </div>
+                            ) : (
+                              <div style={{ display: "flex", flexDirection: "column", gap: "25px" }}>
+                                {/* Learning Overview */}
+                                {todayOverviewData.learning_overview?.length > 0 && (
+                                  <div>
+                                    <h4 style={{ fontSize: "16px", color: "#333", marginBottom: "15px", borderBottom: "2px solid #e1e5e9", paddingBottom: "8px", display: "flex", alignItems: "center", gap: "8px" }}>
+                                      <span>📚</span> Learning Activity
+                                    </h4>
+                                    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", gap: "15px" }}>
+                                      {todayOverviewData.learning_overview.map((item, idx) => (
+                                        <div key={idx} style={{ padding: "15px", background: "#fff", borderRadius: "10px", border: "1px solid #e1e5e9", boxShadow: "0 2px 4px rgba(0,0,0,0.02)" }}>
+                                          <div style={{ marginBottom: "12px", borderBottom: "1px dashed #eee", paddingBottom: "10px" }}>
+                                            <span style={{ fontSize: "11px", color: "#667eea", textTransform: "uppercase", fontWeight: "bold" }}>Class {item.class_name} &bull; {item.subject_name}</span>
+                                            <h5 style={{ margin: "5px 0 0 0", color: "#333", fontSize: "15px", lineHeight: "1.3" }}>{item.chapter_name}</h5>
+                                          </div>
+                                          <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+                                            {['notes', 'qna', 'formula', 'skimcard'].filter(m => item.modules[m]).map(mod => {
+                                              const progress = item.modules[mod].today_completed_percentage;
+                                              if (progress <= 0) return null; // only show what they studied today
+
+                                              const label = mod === "skimcard" ? "Skim Cards" : mod === "notes" ? "Notes" : mod === "formula" ? "Formulas" : "Q&A";
+                                              return (
+                                                <div key={mod}>
+                                                  <div style={{ display: "flex", justifyContent: "space-between", fontSize: "12px", marginBottom: "4px" }}>
+                                                    <span style={{ color: "#555", fontWeight: "500" }}>{label}</span>
+                                                    <span style={{ color: "#4f46e5", fontWeight: "bold" }}>+{progress}% Today</span>
+                                                  </div>
+                                                  <div style={{ width: "100%", height: "6px", background: "#f1f5f9", borderRadius: "3px", overflow: "hidden" }}>
+                                                    <div style={{ width: `${progress}%`, height: "100%", background: "#4f46e5" }}></div>
+                                                  </div>
+                                                </div>
+                                              );
+                                            })}
+                                          </div>
+                                        </div>
+                                      ))}
+                                    </div>
+                                  </div>
+                                )}
+
+                                {/* Practice Overview */}
+                                {todayOverviewData.practice_overview?.length > 0 && (
+                                  <div>
+                                    <h4 style={{ fontSize: "16px", color: "#333", marginBottom: "15px", borderBottom: "2px solid #e1e5e9", paddingBottom: "8px", display: "flex", alignItems: "center", gap: "8px" }}>
+                                      <span>📝</span> Practice Tests
+                                    </h4>
+                                    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(250px, 1fr))", gap: "15px" }}>
+                                      {todayOverviewData.practice_overview.map((item, idx) => (
+                                        <div key={idx} style={{ padding: "15px", background: "#fff", borderRadius: "10px", border: "1px solid #e1e5e9", boxShadow: "0 2px 4px rgba(0,0,0,0.02)", display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
+                                          <div>
+                                            <span style={{ fontSize: "11px", color: "#667eea", textTransform: "uppercase", fontWeight: "bold" }}>Class {item.class_name} &bull; {item.subject_name}</span>
+                                            <h5 style={{ margin: "5px 0 15px 0", color: "#333", fontSize: "14px", lineHeight: "1.3" }}>{item.chapter_name}</h5>
+                                          </div>
+                                          <div>
+                                            <div style={{ fontSize: "11px", color: "#666", textTransform: "uppercase", fontWeight: "bold", marginBottom: "2px" }}>Score</div>
+                                            <div style={{ fontSize: "24px", fontWeight: "bold", color: parseFloat(item.percentage_scored) >= 70 ? "#28a745" : parseFloat(item.percentage_scored) >= 40 ? "#fd7e14" : "#dc3545" }}>
+                                              {parseFloat(item.percentage_scored).toFixed(0)}%
+                                            </div>
+                                          </div>
+                                        </div>
+                                      ))}
+                                    </div>
+                                  </div>
+                                )}
+                              </div>
+                            )}
+                          </div>
+                        )}
+
                         {userInnerTab === "overview" && (
                           <div style={{ animation: "fadeIn 0.3s ease-in-out" }}>
                             <div className="student-overview-header" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px" }}>
-                              <h3 style={{ fontSize: "20px", margin: 0, color: "#333" }}>Student Overview</h3>
-                              <button 
+                              <h3 style={{ fontSize: "20px", margin: 0, color: "#333" }}>Student Profile</h3>
+                              <button
                                 onClick={handleDeleteStudent}
                                 title="Remove Student"
                                 style={{ display: "flex", alignItems: "center", justifyContent: "center", padding: "8px 12px", background: "#fff", border: "1px solid #dc3545", color: "#dc3545", borderRadius: "6px", cursor: "pointer", transition: "all 0.2s" }}
@@ -924,48 +1124,48 @@ const SupervisorAuth = () => {
                               </button>
                             </div>
                             <div className="dashboard-cards-grid">
-                            {/* Academic Info Card */}
-                            <div style={{ padding: "25px", background: "#f8f9fa", borderRadius: "12px", border: "1px solid #e1e5e9", boxShadow: "0 2px 5px rgba(0,0,0,0.02)" }}>
-                              <h4 style={{ fontSize: "14px", color: "#667eea", textTransform: "uppercase", letterSpacing: "1px", margin: "0 0 15px 0", borderBottom: "1px solid #e1e5e9", paddingBottom: "10px" }}>Academic Info</h4>
-                              <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
-                                <div style={{ display: "flex", justifyContent: "space-between" }}>
-                                  <span style={{ color: "#666", fontSize: "14px" }}>Class</span>
-                                  <strong style={{ color: "#333", fontSize: "15px" }}>{selectedUser.current_class}</strong>
-                                </div>
-                                <div style={{ display: "flex", justifyContent: "space-between" }}>
-                                  <span style={{ color: "#666", fontSize: "14px" }}>Subject</span>
-                                  <strong style={{ color: "#333", fontSize: "15px" }}>{selectedUser.subject}</strong>
-                                </div>
-                                <div style={{ display: "flex", justifyContent: "space-between" }}>
-                                  <span style={{ color: "#666", fontSize: "14px" }}>Current Chapter</span>
-                                  <strong style={{ color: "#333", fontSize: "15px", textAlign: "right", maxWidth: "60%" }}>{selectedUser.chapter}</strong>
+                              {/* Academic Info Card */}
+                              <div style={{ padding: "25px", background: "#f8f9fa", borderRadius: "12px", border: "1px solid #e1e5e9", boxShadow: "0 2px 5px rgba(0,0,0,0.02)" }}>
+                                <h4 style={{ fontSize: "14px", color: "#667eea", textTransform: "uppercase", letterSpacing: "1px", margin: "0 0 15px 0", borderBottom: "1px solid #e1e5e9", paddingBottom: "10px" }}>Academic Info</h4>
+                                <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+                                  <div style={{ display: "flex", justifyContent: "space-between" }}>
+                                    <span style={{ color: "#666", fontSize: "14px" }}>Class</span>
+                                    <strong style={{ color: "#333", fontSize: "15px" }}>{selectedUser.current_class}</strong>
+                                  </div>
+                                  <div style={{ display: "flex", justifyContent: "space-between" }}>
+                                    <span style={{ color: "#666", fontSize: "14px" }}>Subject</span>
+                                    <strong style={{ color: "#333", fontSize: "15px" }}>{selectedUser.subject}</strong>
+                                  </div>
+                                  <div style={{ display: "flex", justifyContent: "space-between" }}>
+                                    <span style={{ color: "#666", fontSize: "14px" }}>Current Chapter</span>
+                                    <strong style={{ color: "#333", fontSize: "15px", textAlign: "right", maxWidth: "60%" }}>{selectedUser.chapter}</strong>
+                                  </div>
                                 </div>
                               </div>
-                            </div>
 
-                            {/* Plan Details Card */}
-                            <div style={{ padding: "25px", background: "#f8f9fa", borderRadius: "12px", border: "1px solid #e1e5e9", boxShadow: "0 2px 5px rgba(0,0,0,0.02)" }}>
-                              <h4 style={{ fontSize: "14px", color: "#667eea", textTransform: "uppercase", letterSpacing: "1px", margin: "0 0 15px 0", borderBottom: "1px solid #e1e5e9", paddingBottom: "10px" }}>Subscription</h4>
-                              <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
-                                <div style={{ display: "flex", justifyContent: "space-between" }}>
-                                  <span style={{ color: "#666", fontSize: "14px" }}>Current Plan</span>
-                                  <strong style={{ color: "#333", fontSize: "15px", textTransform: "capitalize" }}>{selectedUser.plan}</strong>
-                                </div>
-                                <div style={{ display: "flex", justifyContent: "space-between" }}>
-                                  <span style={{ color: "#666", fontSize: "14px" }}>Remaining Days</span>
-                                  <strong style={{ color: "#333", fontSize: "15px" }}>{selectedUser.plan_remaining_days}</strong>
+                              {/* Plan Details Card */}
+                              <div style={{ padding: "25px", background: "#f8f9fa", borderRadius: "12px", border: "1px solid #e1e5e9", boxShadow: "0 2px 5px rgba(0,0,0,0.02)" }}>
+                                <h4 style={{ fontSize: "14px", color: "#667eea", textTransform: "uppercase", letterSpacing: "1px", margin: "0 0 15px 0", borderBottom: "1px solid #e1e5e9", paddingBottom: "10px" }}>Subscription</h4>
+                                <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+                                  <div style={{ display: "flex", justifyContent: "space-between" }}>
+                                    <span style={{ color: "#666", fontSize: "14px" }}>Current Plan</span>
+                                    <strong style={{ color: "#333", fontSize: "15px", textTransform: "capitalize" }}>{selectedUser.plan}</strong>
+                                  </div>
+                                  <div style={{ display: "flex", justifyContent: "space-between" }}>
+                                    <span style={{ color: "#666", fontSize: "14px" }}>Remaining Days</span>
+                                    <strong style={{ color: "#333", fontSize: "15px" }}>{selectedUser.plan_remaining_days}</strong>
+                                  </div>
                                 </div>
                               </div>
                             </div>
-                          </div>
                           </div>
                         )}
 
                         {userInnerTab === "learning" && (
                           <div style={{ animation: "fadeIn 0.3s ease-in-out" }}>
                             <div className="filters-container" style={{ display: "flex", justifyContent: "flex-end", alignItems: "center", gap: "15px", marginBottom: "20px" }}>
-                              <select 
-                                value={dateFilter} 
+                              <select
+                                value={dateFilter}
                                 onChange={handleDateFilterChange}
                                 className="filter-select"
                                 style={{ padding: "8px 15px", borderRadius: "8px", border: "1px solid #ccc", outline: "none", fontSize: "14px", cursor: "pointer", background: "#fff", color: "#333" }}
@@ -977,7 +1177,7 @@ const SupervisorAuth = () => {
                                 <option value="last month">Last Month</option>
                                 <option value="overall">Overall</option>
                               </select>
-                              <input 
+                              <input
                                 type="text"
                                 placeholder="Search chapter..."
                                 value={learningSearchQuery}
@@ -1000,7 +1200,7 @@ const SupervisorAuth = () => {
                                         <span style={{ fontSize: "12px", color: "#999", textTransform: "uppercase", fontWeight: "bold" }}>Class {item.class_name} &bull; {item.subject_name}</span>
                                         <h4 style={{ margin: "5px 0 0 0", color: "#333", fontSize: "18px" }}>{item.chapter_name}</h4>
                                       </div>
-                                      
+
                                       <div style={{ display: "flex", flexDirection: "column", gap: "15px" }}>
                                         {['notes', 'qna', 'formula', 'skimcard'].filter(m => item.modules[m]).map((moduleName) => {
                                           const progressData = item.modules[moduleName];
@@ -1028,7 +1228,7 @@ const SupervisorAuth = () => {
                                 </div>
 
                                 {hasMoreLearning && (
-                                  <button 
+                                  <button
                                     onClick={() => fetchLearningProgress(false)}
                                     disabled={loadingLearning}
                                     style={{ padding: "10px", width: "100%", background: "#f8f9fa", border: "1px dashed #ccc", borderRadius: "8px", color: "#555", fontWeight: "bold", cursor: loadingLearning ? "not-allowed" : "pointer", marginTop: "20px" }}
@@ -1043,7 +1243,6 @@ const SupervisorAuth = () => {
 
                         {userInnerTab === "subject_progress" && (
                           <div style={{ animation: "fadeIn 0.3s ease-in-out" }}>
-                            <h3 style={{ fontSize: "20px", marginBottom: "25px", color: "#333" }}>Subject Wise Progress</h3>
 
                             {loadingSubjectProgress ? (
                               <p style={{ color: "#777", fontSize: "14px", textAlign: "center", padding: "40px 0" }}>Loading subject data...</p>
@@ -1053,7 +1252,7 @@ const SupervisorAuth = () => {
                               <div style={{ display: "flex", flexDirection: "column", gap: "15px" }}>
                                 {subjectProgressData.map((classData) => (
                                   <div key={classData.class_id} style={{ overflow: "hidden", marginBottom: "5px" }}>
-                                    <div 
+                                    <div
                                       onClick={() => {
                                         setExpandedClassId(expandedClassId === classData.class_id ? null : classData.class_id);
                                         setExpandedSubjectId(null);
@@ -1070,13 +1269,13 @@ const SupervisorAuth = () => {
                                         </svg>
                                       </div>
                                     </div>
-                                    
+
                                     {expandedClassId === classData.class_id && (
                                       <div className="class-subjects-container" style={{ padding: "0", background: "transparent" }}>
                                         <div style={{ display: "flex", flexDirection: "column", gap: "15px" }}>
                                           {classData.subjects.map((subject) => (
                                             <div key={subject.subject_id} style={{ overflow: "hidden", borderBottom: "1px solid #f1f1f1" }}>
-                                              <div 
+                                              <div
                                                 onClick={() => handleSubjectClick(classData.class_id, subject.subject_id)}
                                                 className="subject-row"
                                                 style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "10px", cursor: "pointer", background: "transparent" }}
@@ -1114,7 +1313,7 @@ const SupervisorAuth = () => {
                                                               {chapter.overall_chapter_progress}%
                                                             </span>
                                                           </div>
-                                                          
+
                                                           <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
                                                             {['notes', 'qna', 'formula', 'skimcard'].filter(m => chapter.modules && chapter.modules[m]).map((moduleName) => {
                                                               const progressData = chapter.modules[moduleName];
@@ -1157,8 +1356,7 @@ const SupervisorAuth = () => {
                         {userInnerTab === "quiz" && (
                           <div style={{ animation: "fadeIn 0.3s ease-in-out" }}>
                             <div className="filters-container" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "25px" }}>
-                              <h3 style={{ fontSize: "20px", margin: 0, color: "#333" }}>Chapter Quiz Progress</h3>
-                              <input 
+                              <input
                                 type="text"
                                 placeholder="Search chapter..."
                                 value={quizSearchQuery}
@@ -1181,14 +1379,14 @@ const SupervisorAuth = () => {
                                     if (quiz.trend && Array.isArray(quiz.trend)) {
                                       trend = quiz.trend.map(Number);
                                     }
-                                    
+
                                     const svgWidth = 80;
                                     const svgHeight = 30;
                                     const padX = 5;
                                     const padY = 4;
                                     const graphWidth = svgWidth - 2 * padX;
                                     const graphHeight = svgHeight - 2 * padY;
-                                    
+
                                     let points = [];
                                     if (trend.length === 1) {
                                       points.push({ x: svgWidth / 2, y: padY + graphHeight - (trend[0] / 100) * graphHeight });
@@ -1202,7 +1400,10 @@ const SupervisorAuth = () => {
                                     const polylinePoints = points.map(p => `${p.x},${p.y}`).join(' ');
 
                                     return (
-                                      <div key={idx} style={{ padding: "20px", background: "#fff", borderRadius: "10px", border: "1px solid #e1e5e9", boxShadow: "0 2px 8px rgba(0,0,0,0.03)", display: "flex", flexDirection: "column" }}>
+                                      <div
+                                        key={idx}
+                                        style={{ padding: "20px", background: "#fff", borderRadius: "10px", border: "1px solid #e1e5e9", boxShadow: "0 2px 8px rgba(0,0,0,0.03)", display: "flex", flexDirection: "column" }}
+                                      >
                                         <div style={{ marginBottom: "15px", borderBottom: "1px solid #eee", paddingBottom: "10px" }}>
                                           <span style={{ fontSize: "12px", color: "#999", textTransform: "uppercase", fontWeight: "bold" }}>Class {quiz.class} &bull; {quiz.subject}</span>
                                           <h4 style={{ margin: "5px 0 0 0", color: "#333", fontSize: "17px", lineHeight: "1.3" }}>{quiz.chapter}</h4>
@@ -1210,7 +1411,7 @@ const SupervisorAuth = () => {
                                             Completed: {new Date(quiz.completion_date).toLocaleDateString()}
                                           </div>
                                         </div>
-                                        
+
                                         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginTop: "auto" }}>
                                           <div>
                                             <div style={{ fontSize: "12px", color: "#666", textTransform: "uppercase", fontWeight: "bold", marginBottom: "2px" }}>Latest Score</div>
@@ -1218,7 +1419,7 @@ const SupervisorAuth = () => {
                                               {parseFloat(quiz.scored_percentage).toFixed(0)}%
                                             </div>
                                           </div>
-                                          
+
                                           {trend.length > 0 && (
                                             <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
                                               <div style={{ fontSize: "11px", color: "#999", marginBottom: "4px" }}>Trend (Last 3)</div>
@@ -1233,12 +1434,33 @@ const SupervisorAuth = () => {
                                             </div>
                                           )}
                                         </div>
+
+                                        {quiz.examID && (
+                                          <div style={{ display: "flex", gap: "10px", marginTop: "15px" }}>
+                                            <button
+                                              onClick={() => handleExamClick(quiz.examID)}
+                                              style={{ flex: 1, padding: "8px 12px", background: "#edf2f7", border: "1px solid #e2e8f0", borderRadius: "6px", color: "#4f46e5", fontSize: "13px", fontWeight: "bold", cursor: "pointer", transition: "background 0.2s" }}
+                                              onMouseOver={(e) => e.currentTarget.style.background = "#e2e8f0"}
+                                              onMouseOut={(e) => e.currentTarget.style.background = "#edf2f7"}
+                                            >
+                                              Answer Sheet
+                                            </button>
+                                            <button
+                                              onClick={() => handleAnalysisClick(quiz.examID)}
+                                              style={{ flex: 1, padding: "8px 12px", background: "#4f46e5", border: "1px solid #4f46e5", borderRadius: "6px", color: "#fff", fontSize: "13px", fontWeight: "bold", cursor: "pointer", transition: "background 0.2s" }}
+                                              onMouseOver={(e) => e.currentTarget.style.background = "#4338ca"}
+                                              onMouseOut={(e) => e.currentTarget.style.background = "#4f46e5"}
+                                            >
+                                              AI Analysis
+                                            </button>
+                                          </div>
+                                        )}
                                       </div>
                                     );
                                   })}
                                 </div>
                                 {hasMoreQuiz && (
-                                  <button 
+                                  <button
                                     onClick={() => fetchQuizProgress(false)}
                                     disabled={loadingQuiz}
                                     style={{ padding: "10px", width: "100%", background: "#f8f9fa", border: "1px dashed #ccc", borderRadius: "8px", color: "#555", fontWeight: "bold", cursor: loadingQuiz ? "not-allowed" : "pointer", marginTop: "10px" }}
@@ -1272,7 +1494,7 @@ const SupervisorAuth = () => {
                 height: 60
               }}
             />
-            
+
             {step === 1 ? (
               <>
                 <h2 className="form-title" style={{ marginBottom: "10px" }}>{uiData?.header_title}</h2>
@@ -1334,7 +1556,7 @@ const SupervisorAuth = () => {
                 <p style={{ textAlign: "center", color: "#555", marginBottom: "20px", fontSize: "14px", fontWeight: "500" }}>
                   A verification code has been sent to +{selectedCode} {phoneNumber}.
                 </p>
-                
+
                 {errorMessage && (
                   <div className="error-message" style={{ color: "#d9534f", textAlign: "center", marginBottom: "15px", fontWeight: "bold" }}>
                     {errorMessage}
@@ -1365,23 +1587,23 @@ const SupervisorAuth = () => {
                   {allowOtp === 0 ? (
                     <span style={{ color: "#d9534f" }}>Please try later after {reAllowTimer} minutes.</span>
                   ) : (
-                    <button 
-                      type="button" 
-                      onClick={handleGetOtp} 
+                    <button
+                      type="button"
+                      onClick={handleGetOtp}
                       disabled={resendTimer > 0 || allowOtp !== 1 || submitting}
-                      style={{ 
-                        background: "none", border: "none", color: (resendTimer > 0 || allowOtp !== 1) ? "#999" : "#667eea", 
-                        cursor: (resendTimer > 0 || allowOtp !== 1) ? "not-allowed" : "pointer", fontWeight: "bold", textDecoration: "underline" 
+                      style={{
+                        background: "none", border: "none", color: (resendTimer > 0 || allowOtp !== 1) ? "#999" : "#667eea",
+                        cursor: (resendTimer > 0 || allowOtp !== 1) ? "not-allowed" : "pointer", fontWeight: "bold", textDecoration: "underline"
                       }}
                     >
                       Resend OTP {resendTimer > 0 ? `in ${resendTimer}s` : ""}
                     </button>
                   )}
-                  
+
                   <div style={{ marginTop: "15px" }}>
-                    <button 
-                      type="button" 
-                      onClick={() => setStep(1)} 
+                    <button
+                      type="button"
+                      onClick={() => setStep(1)}
                       style={{ background: "none", border: "none", color: "#555", cursor: "pointer", textDecoration: "underline", fontSize: "13px" }}
                     >
                       Change Phone Number
@@ -1395,7 +1617,7 @@ const SupervisorAuth = () => {
                 <p style={{ textAlign: "center", color: "#555", marginBottom: "20px", fontSize: "14px", fontWeight: "500" }}>
                   Please enter your name to continue.
                 </p>
-                
+
                 {errorMessage && (
                   <div className="error-message" style={{ color: "#d9534f", textAlign: "center", marginBottom: "15px", fontWeight: "bold" }}>
                     {errorMessage}
@@ -1423,6 +1645,184 @@ const SupervisorAuth = () => {
                   </button>
                 </form>
               </>
+            ) : null}
+          </div>
+        </div>
+      )}
+
+      {/* Exam Result Modal */}
+      {isExamModalOpen && (
+        <div style={{ position: "fixed", top: 0, left: 0, width: "100%", height: "100%", backgroundColor: "rgba(0,0,0,0.5)", display: "flex", justifyContent: "center", alignItems: "center", zIndex: 1000 }}>
+          <div style={{ background: "#fff", width: "90%", maxWidth: "600px", maxHeight: "90vh", overflowY: "auto", borderRadius: "10px", padding: "20px", position: "relative" }}>
+            <button
+              onClick={() => setIsExamModalOpen(false)}
+              style={{ position: "absolute", top: "15px", right: "20px", background: "none", border: "none", fontSize: "24px", cursor: "pointer", color: "#666" }}
+            >
+              &times;
+            </button>
+            <h3 style={{ marginTop: 0, color: "#333", borderBottom: "1px solid #eee", paddingBottom: "10px" }}>Answer Sheet</h3>
+
+            {loadingExamResult ? (
+              <p style={{ textAlign: "center", padding: "40px", color: "#666" }}>Loading results...</p>
+            ) : selectedExamResult ? (
+              <div>
+                <div style={{ display: "flex", justifyContent: "space-between", background: "#f8f9fa", padding: "15px", borderRadius: "8px", marginBottom: "20px" }}>
+                  <div style={{ textAlign: "center" }}>
+                    <div style={{ fontSize: "20px", fontWeight: "bold", color: "#333" }}>{selectedExamResult.total_question}</div>
+                    <div style={{ fontSize: "12px", color: "#666" }}>Total</div>
+                  </div>
+                  <div style={{ textAlign: "center" }}>
+                    <div style={{ fontSize: "20px", fontWeight: "bold", color: "#10b981" }}>{selectedExamResult.correct_answer}</div>
+                    <div style={{ fontSize: "12px", color: "#666" }}>Correct</div>
+                  </div>
+                  <div style={{ textAlign: "center" }}>
+                    <div style={{ fontSize: "20px", fontWeight: "bold", color: "#ef4444" }}>{selectedExamResult.incorrect_answer}</div>
+                    <div style={{ fontSize: "12px", color: "#666" }}>Incorrect</div>
+                  </div>
+                </div>
+
+                <div style={{ display: "flex", flexDirection: "column", gap: "15px" }}>
+                  {selectedExamResult.attempted_questions && selectedExamResult.attempted_questions.map((q, i) => {
+                    const isCorrect = q.options && q.options[q.user_answer] ? q.options[q.user_answer] === q.correct_answer : q.user_answer === q.correct_answer;
+                    return (
+                      <div key={i} style={{ border: "1px solid #eee", borderRadius: "8px", padding: "15px" }}>
+                        <div style={{ fontWeight: "bold", marginBottom: "10px", fontSize: "15px", color: "#333" }}>Q{i + 1}. {q.question}</div>
+
+                        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px", marginBottom: "10px", fontSize: "13px" }}>
+                          <div style={{ background: isCorrect ? "#ecfdf5" : "#fef2f2", padding: "8px", borderRadius: "6px", color: isCorrect ? "#065f46" : "#991b1b" }}>
+                            <strong>Your Answer:</strong> {q.options && q.options[q.user_answer] ? q.options[q.user_answer] : q.user_answer}
+                          </div>
+                          <div style={{ background: "#ecfdf5", padding: "8px", borderRadius: "6px", color: "#065f46" }}>
+                            <strong>Correct Answer:</strong> {q.correct_answer}
+                          </div>
+                        </div>
+
+                        {q.explanation && (
+                          <div style={{ fontSize: "12px", color: "#555", background: "#f8f9fa", padding: "10px", borderRadius: "6px" }}>
+                            <strong>Explanation:</strong> {q.explanation}
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            ) : null}
+          </div>
+        </div>
+      )}
+
+      {/* AI Analysis Modal */}
+      {isAnalysisModalOpen && (
+        <div style={{ position: "fixed", top: 0, left: 0, width: "100%", height: "100%", backgroundColor: "rgba(0,0,0,0.5)", display: "flex", justifyContent: "center", alignItems: "center", zIndex: 1000 }}>
+          <div style={{ background: "#fff", width: "90%", maxWidth: "800px", maxHeight: "90vh", overflowY: "auto", borderRadius: "10px", padding: "20px", position: "relative" }}>
+            <button
+              onClick={() => setIsAnalysisModalOpen(false)}
+              style={{ position: "absolute", top: "15px", right: "20px", background: "none", border: "none", fontSize: "24px", cursor: "pointer", color: "#666" }}
+            >
+              &times;
+            </button>
+            <h3 style={{ marginTop: 0, color: "#333", borderBottom: "1px solid #eee", paddingBottom: "10px", display: "flex", alignItems: "center", gap: "10px" }}>
+              <span style={{ fontSize: "20px" }}>✨</span> AI Exam Analysis
+            </h3>
+
+            {loadingAnalysis ? (
+              <p style={{ textAlign: "center", padding: "40px", color: "#666" }}>Generating AI analysis...</p>
+            ) : selectedAnalysisResult ? (
+              <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
+                {/* Stats Row */}
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))", gap: "15px" }}>
+                  <div style={{ background: "#f8f9fa", padding: "15px", borderRadius: "8px", textAlign: "center" }}>
+                    <div style={{ fontSize: "24px", fontWeight: "bold", color: "#4f46e5" }}>{selectedAnalysisResult.percentage}%</div>
+                    <div style={{ fontSize: "12px", color: "#666" }}>Score</div>
+                  </div>
+                  <div style={{ background: "#f8f9fa", padding: "15px", borderRadius: "8px", textAlign: "center" }}>
+                    <div style={{ fontSize: "24px", fontWeight: "bold", color: "#10b981" }}>+{selectedAnalysisResult.improvement_by}%</div>
+                    <div style={{ fontSize: "12px", color: "#666" }}>Previous Quiz Improvement</div>
+                  </div>
+                  <div style={{ background: "#f8f9fa", padding: "15px", borderRadius: "8px", textAlign: "center" }}>
+                    <div style={{ fontSize: "24px", fontWeight: "bold", color: "#f59e0b" }}>{selectedAnalysisResult.percentile_ranking?.percentile_rank || "N/A"}</div>
+                    <div style={{ fontSize: "12px", color: "#666" }}>Percentile Rank</div>
+                  </div>
+                  <div style={{ background: "#f8f9fa", padding: "15px", borderRadius: "8px", textAlign: "center" }}>
+                    <div style={{ fontSize: "24px", fontWeight: "bold", color: "#3b82f6" }}>{selectedAnalysisResult.avg_time_per_question}s</div>
+                    <div style={{ fontSize: "12px", color: "#666" }}>Avg Time/Question</div>
+                  </div>
+                </div>
+
+                {/* AI Insights: Mistake Patterns */}
+                {selectedAnalysisResult.ai_analysis?.mistake_patterns?.length > 0 && (
+                  <div>
+                    <h4 style={{ color: "#ef4444", fontSize: "16px", marginBottom: "10px", display: "flex", alignItems: "center", gap: "8px" }}>
+                      <span>⚠️</span> Mistake Patterns
+                    </h4>
+                    <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+                      {selectedAnalysisResult.ai_analysis.mistake_patterns.map((mp, i) => (
+                        <div key={i} style={{ background: "#fef2f2", border: "1px solid #fecaca", borderRadius: "8px", padding: "12px" }}>
+                          <div style={{ fontWeight: "bold", color: "#991b1b", marginBottom: "5px" }}>{mp.pattern}</div>
+                          <div style={{ fontSize: "13px", color: "#b91c1c", marginBottom: "8px" }}>{mp.description}</div>
+                          {mp.question_numbers && mp.question_numbers.length > 0 && (
+                            <div style={{ fontSize: "11px", color: "#dc2626", fontWeight: "bold" }}>                            </div>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* AI Insights: Knowledge Gaps */}
+                {selectedAnalysisResult.ai_analysis?.knowledge_gaps?.length > 0 && (
+                  <div>
+                    <h4 style={{ color: "#f59e0b", fontSize: "16px", marginBottom: "10px", display: "flex", alignItems: "center", gap: "8px" }}>
+                      <span>🔍</span> Knowledge Gaps
+                    </h4>
+                    <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+                      {selectedAnalysisResult.ai_analysis.knowledge_gaps.map((kg, i) => (
+                        <div key={i} style={{ background: "#fffbeb", border: "1px solid #fde68a", borderRadius: "8px", padding: "12px" }}>
+                          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "8px" }}>
+                            <div style={{ fontWeight: "bold", color: "#b45309" }}>{kg.topic}</div>
+                            <span style={{ fontSize: "11px", background: "#fef3c7", padding: "2px 6px", borderRadius: "4px", color: "#d97706", fontWeight: "bold" }}>
+                              {kg.severity} Severity
+                            </span>
+                          </div>
+                          <ul style={{ margin: 0, paddingLeft: "20px", fontSize: "13px", color: "#92400e" }}>
+                            {kg.missing_concepts?.map((c, j) => (
+                              <li key={j} style={{ marginBottom: "3px" }}>{c}</li>
+                            ))}
+                          </ul>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Topic Performance */}
+                {selectedAnalysisResult.ai_analysis?.topic_performance?.length > 0 && (
+                  <div>
+                    <h4 style={{ color: "#10b981", fontSize: "16px", marginBottom: "10px", display: "flex", alignItems: "center", gap: "8px" }}>
+                      <span>📈</span> Topic Performance
+                    </h4>
+                    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))", gap: "10px" }}>
+                      {selectedAnalysisResult.ai_analysis.topic_performance.map((tp, i) => (
+                        <div key={i} style={{ border: "1px solid #eee", borderRadius: "8px", padding: "12px" }}>
+                          <div style={{ fontWeight: "bold", color: "#333", fontSize: "14px", marginBottom: "8px" }}>{tp.topic}</div>
+                          <div style={{ display: "flex", justifyContent: "space-between", fontSize: "12px", color: "#666", marginBottom: "5px" }}>
+                            <span>Score: {tp.score_percent}%</span>
+                            <span>{tp.correct} / {tp.total}</span>
+                          </div>
+                          <div style={{ width: "100%", height: "6px", background: "#f1f5f9", borderRadius: "3px", overflow: "hidden" }}>
+                            <div style={{ width: `${tp.score_percent}%`, height: "100%", background: tp.score_percent >= 80 ? "#10b981" : tp.score_percent >= 50 ? "#f59e0b" : "#ef4444" }}></div>
+                          </div>
+                          <div style={{ fontSize: "11px", marginTop: "8px", fontWeight: "bold", color: tp.performance_label === "Outstanding" ? "#10b981" : tp.performance_label === "Progressing Well" ? "#f59e0b" : tp.performance_label === "Needs Review" ? "#ef4444" : "#666" }}>
+                            {tp.performance_label}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+              </div>
             ) : null}
           </div>
         </div>
