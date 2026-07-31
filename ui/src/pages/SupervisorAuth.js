@@ -395,12 +395,13 @@ const SupervisorAuth = () => {
 
     try {
       const token = localStorage.getItem("supervisor_access_token");
-      await axios.patch(PATCH_NAME_URL, {
+      const num = localStorage.getItem("supervisor_number") || phoneNumber;
+      await axios.post(PATCH_NAME_URL, {
         name: supervisorName.trim()
       }, {
         headers: {
           ...API_HEADERS,
-          'Supervisor-Number': phoneNumber,
+          'Supervisor-Number': num,
           'New-Key': token
         }
       });
@@ -432,14 +433,18 @@ const SupervisorAuth = () => {
         axios.get(GET_USER_DETAILS_URL, { headers }).catch(e => e)
       ]);
 
+      let currentPending = [];
       if (pendingRes?.data?.status === 200 && pendingRes.data.pending_requests) {
-        setPendingRequests(pendingRes.data.pending_requests);
+        currentPending = pendingRes.data.pending_requests;
+        setPendingRequests(currentPending);
       } else {
         setPendingRequests([]);
       }
 
       if (linkedRes?.data?.status === 200 && linkedRes.data.data) {
-        setLinkedUsers(linkedRes.data.data);
+        const pendingUserIds = currentPending.map(req => String(req.user_id));
+        const filteredLinked = linkedRes.data.data.filter(user => !pendingUserIds.includes(String(user.user_id)));
+        setLinkedUsers(filteredLinked);
       } else {
         setLinkedUsers([]);
       }
