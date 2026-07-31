@@ -446,8 +446,7 @@ const SupervisorAuth = () => {
       }
 
       if (linkedRes?.data?.status === 200 && linkedRes.data.data) {
-        const pendingUserIds = currentPending.map(req => String(req.user_id));
-        const filteredLinked = linkedRes.data.data.filter(user => !pendingUserIds.includes(String(user.user_id)));
+        const filteredLinked = linkedRes.data.data.filter(user => user.link_status === 'accepted');
         setLinkedUsers(filteredLinked);
       } else {
         setLinkedUsers([]);
