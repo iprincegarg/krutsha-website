@@ -400,7 +400,7 @@ const SupervisorAuth = () => {
     try {
       const token = localStorage.getItem("supervisor_access_token");
       const num = localStorage.getItem("supervisor_number") || phoneNumber;
-      await axios.post(PATCH_NAME_URL, {
+      await axios.patch(PATCH_NAME_URL, {
         name: supervisorName.trim()
       }, {
         headers: {
