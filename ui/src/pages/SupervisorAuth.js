@@ -243,13 +243,17 @@ const SupervisorAuth = () => {
   // Timer countdown logic
   useEffect(() => {
     let interval;
-    if (step === 2 && resendTimer > 0) {
+    if (step === 2) {
       interval = setInterval(() => {
-        setResendTimer((prev) => prev - 1);
+        setResendTimer((prev) => {
+          if (prev > 0) return prev - 1;
+          clearInterval(interval);
+          return 0;
+        });
       }, 1000);
     }
     return () => clearInterval(interval);
-  }, [step, resendTimer]);
+  }, [step]);
 
   const handleGetOtp = async (e) => {
     if (e) e.preventDefault();
