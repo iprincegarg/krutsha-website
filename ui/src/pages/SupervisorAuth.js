@@ -1831,6 +1831,52 @@ const SupervisorAuth = () => {
                   </div>
                 )}
 
+                {/* Detailed Question Analysis */}
+                {selectedAnalysisResult.ai_analysis?.results?.length > 0 && (
+                  <div style={{ marginTop: "10px" }}>
+                    <h4 style={{ color: "#4f46e5", fontSize: "16px", marginBottom: "10px", display: "flex", alignItems: "center", gap: "8px" }}>
+                      <span>📝</span> Detailed Question Analysis
+                    </h4>
+                    <div style={{ display: "flex", flexDirection: "column", gap: "15px" }}>
+                      {selectedAnalysisResult.ai_analysis.results.map((result, i) => (
+                        <div key={i} style={{ background: "#f8f9fa", border: "1px solid #e5e7eb", borderRadius: "8px", padding: "15px" }}>
+                          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "10px" }}>
+                            <div style={{ fontWeight: "bold", color: "#1f2937", flex: 1, paddingRight: "10px" }}>Q{i + 1}: {result.question}</div>
+                            <div style={{ fontSize: "12px", background: result.awarded_marks > 0 ? "#d1fae5" : "#fee2e2", color: result.awarded_marks > 0 ? "#065f46" : "#991b1b", padding: "4px 8px", borderRadius: "4px", fontWeight: "bold", whiteSpace: "nowrap" }}>
+                              {result.awarded_marks} / {result.question_marks} Marks
+                            </div>
+                          </div>
+                          
+                          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "15px", marginBottom: "10px" }}>
+                            <div>
+                              <div style={{ fontSize: "12px", color: "#6b7280", fontWeight: "bold", marginBottom: "4px" }}>Your Answer:</div>
+                              <div style={{ fontSize: "14px", color: result.awarded_marks === result.question_marks ? "#059669" : "#dc2626" }}>{result.user_answer || "Not Answered"}</div>
+                            </div>
+                            <div>
+                              <div style={{ fontSize: "12px", color: "#6b7280", fontWeight: "bold", marginBottom: "4px" }}>Correct Answer:</div>
+                              <div style={{ fontSize: "14px", color: "#374151" }}>{result.answer}</div>
+                            </div>
+                          </div>
+
+                          {(result.feedback || result.mistake_type !== "none") && (
+                            <div style={{ background: result.mistake_type === "none" ? "#ecfdf5" : "#fff1f2", borderLeft: `4px solid ${result.mistake_type === "none" ? "#10b981" : "#f43f5e"}`, padding: "10px 12px", borderRadius: "0 6px 6px 0", fontSize: "13px" }}>
+                              {result.mistake_type !== "none" && (
+                                <div style={{ fontWeight: "bold", color: "#be123c", marginBottom: "4px", textTransform: "capitalize" }}>
+                                  Mistake Type: {result.mistake_type.replace(/_/g, ' ')}
+                                </div>
+                              )}
+                              <div style={{ color: result.mistake_type === "none" ? "#065f46" : "#881337" }}>
+                                <strong>Feedback:</strong> {result.feedback}
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+
               </div>
             ) : null}
           </div>
